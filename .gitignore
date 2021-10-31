@@ -1,3 +1,4 @@
 /.vs
 /Diplom/bin/Release/base.mdb
 *.mdb
+*.exe
