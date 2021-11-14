@@ -45,16 +45,24 @@ namespace Diplom
 
         public void ScanFile(string path, string diagnose="Меланома")
         {
-            Bitmap image = new Bitmap(path);
+            Bitmap image;
+            try
+            {
+                image = new Bitmap(path);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
             /*BitmapData bmpData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, image.PixelFormat);
             IntPtr ptr = bmpData.Scan0;
             int bytes = Math.Abs(bmpData.Stride) * image.Height;
             byte[] rgbValues = new byte[bytes];
             Marshal.Copy(ptr, rgbValues, 0, bytes);*/
 
-            dbCommand.Connection = connection;
             string query = "INSERT INTO Exsamples (Path, Diagnose) VALUES ('" + path + "', '" + diagnose + "')";
-            dbCommand.CommandText = query;
+            dbCommand = new OleDbCommand(query, connection);
             dbCommand.ExecuteNonQuery();
 
             //Пока не вспомнил как с маршал работать
@@ -75,7 +83,7 @@ namespace Diplom
                     {
                         for (int j = 0; j < image.Height; ++j)
                         {
-                            if (image.GetPixel(i, j) == Color.White)
+                            if (image.GetPixel(i, j).R == 255 && image.GetPixel(i, j).G == 255 && image.GetPixel(i, j).B == 255)
                                 continue;
                             else
                                 addData(image.GetPixel(i, j).R, image.GetPixel(i, j).G, image.GetPixel(i, j).B, path, diagnose, i, j);
@@ -175,7 +183,7 @@ namespace Diplom
 
         private void Form1_Load(object sender, EventArgs e) //Старт программы
         {
-            connectionStringDefault = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='" + progpath.Replace("Debug\\", "Release") + @"\base.mdb'";
+            connectionStringDefault = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='" + progpath.Replace("Debug\\", "Release") + @"base.mdb'";
             connectionString = connectionStringDefault;
             connection = new OleDbConnection(connectionStringDefault);
             textBox1.Text = connectionStringDefault;
@@ -267,6 +275,7 @@ namespace Diplom
             {
                 var dn = Path.GetDirectoryName(filename);
                 dn = dn.Substring(dn.LastIndexOf('\\') + 1);
+                //MessageBox.Show(filename);
                 if (!checkPath(Path.Combine(dn, Path.GetFileName(filename)))) //Если нет записи о изображении - добавляем, иначе скип
                 {
                     ScanFile(Path.Combine(dn, Path.GetFileName(filename))); //Вызов функции обработки изображений в папке                    
