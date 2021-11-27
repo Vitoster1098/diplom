@@ -20,8 +20,15 @@ namespace Diplom
         public void setAvgColor(Color avg)
         {
             avR[avg.R]++;
-            avR[avg.G]++;
-            avR[avg.B]++;
+            avG[avg.G]++;
+            avB[avg.B]++;
+        }
+
+        public void clearAvg()
+        {
+            for (int i = 0; i < avR.Length - 1; avR[i++] = 0) { }
+            for (int i = 0; i < avG.Length - 1; avG[i++] = 0) { }
+            for (int i = 0; i < avB.Length - 1; avB[i++] = 0) { }
         }
 
         public void addPictures(string path, Bitmap picture)

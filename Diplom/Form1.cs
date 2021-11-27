@@ -287,6 +287,7 @@ namespace Diplom
 
             byte[] da = new byte[(bitmap.Width * bitmap.Height) * 3];
             Marshal.Copy(intPtr, da, 0, da.Length);
+            analyse.clearAvg();
 
             for(int i = 0; i < da.Length - 1; i += 3)
             {
