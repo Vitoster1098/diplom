@@ -14,12 +14,15 @@ namespace Diplom
         {
             InitializeComponent();
         }
+
         string progpath = AppDomain.CurrentDomain.BaseDirectory;
         string connectionStringDefault = "";
         string connectionString = @"", path = "";
         private OleDbConnection connection;
         string[] exsamplesPath;
+        double q = 0, avgBrightness = 127.5;
         OleDbCommand dbCommand = new OleDbCommand();
+        pixelAnalyse analyse = new pixelAnalyse();
 
         private void connect_Click(object sender, EventArgs e) //Соединение с БД
         {
@@ -249,7 +252,50 @@ namespace Diplom
                     MessageBox.Show(ex.Message + "\r\n" + "X:" + (int)reader["X_point"] + "\r\n" + "Y:" + (int)reader["Y_point"], "Ошибка присвоения цвета");
                 }
             }
+
             pictureBox2.Image = fromBase;
+            avgBrightness = analyse.getAverageBrightness(new Bitmap(pictureBox1.Image));
+
+            chart1.Series[0].Points.Clear();
+            chart2.Series[0].Points.Clear();
+            chart3.Series[0].Points.Clear();
+        }
+
+        private void button1_Click(object sender, EventArgs e) //Изменить яркость
+        {
+            /*try
+            {
+                q = Convert.ToDouble(qField.Text);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Ошибка: " + ex, "Ошибка");
+                return;
+            }*/
+            
+            avgLabel.Text ="Средняя яркость: " + avgBrightness;
+            Bitmap bitmap = new Bitmap(pictureBox2.Image);
+
+            BitmapData bpdata = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+            IntPtr intPtr = bpdata.Scan0;
+
+            byte[] da = new byte[(bitmap.Width * bitmap.Height) * 3];
+            Marshal.Copy(intPtr, da, 0, da.Length);
+
+            for(int i = 0; i < da.Length - 1; i += 3)
+            {
+                Color clr = Color.FromArgb(255, da[i], da[i + 1], da[i + 2]);
+                Color newclr = analyse.newBrightness(clr, avgBrightness);
+                da[i] = newclr.R;
+                da[i + 1] = newclr.G;
+                da[i + 2] = newclr.B;
+            }
+
+            Marshal.Copy(da, 0, intPtr, da.Length);
+            bitmap.UnlockBits(bpdata);
+            pictureBox2.Image = bitmap;
+
+            analyse.setRGB(chart1, chart2, chart3);
         }
 
         private void фотоToolStripMenuItem_Click(object sender, EventArgs e)
