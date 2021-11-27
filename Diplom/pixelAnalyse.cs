@@ -27,7 +27,7 @@ namespace Diplom
             return map[path];
         }
 
-        public static UInt32 Brightness(UInt32 point, int poz, int lenght) //poz - значение ползунка, length - максимальное значение ползунка
+        /*public static UInt32 Brightness(UInt32 point, int poz, int lenght) //poz - значение ползунка, length - максимальное значение ползунка
         {
             int R;
             int G;
@@ -50,7 +50,7 @@ namespace Diplom
             point = 0xFF000000 | ((UInt32)R << 16) | ((UInt32)G << 8) | ((UInt32)B);
 
             return point;
-        }
+        }*/
 
         public double getAverageBrightness(Bitmap bitmap)
         {
