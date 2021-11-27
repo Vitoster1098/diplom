@@ -17,6 +17,13 @@ namespace Diplom
         public int[] avG = new int[256];
         public int[] avB = new int[256];
 
+        public void setAvgColor(Color avg)
+        {
+            avR[avg.R]++;
+            avR[avg.G]++;
+            avR[avg.B]++;
+        }
+
         public void addPictures(string path, Bitmap picture)
         {
             map.Add(path, picture);
@@ -66,9 +73,6 @@ namespace Diplom
             {
                 //lab += (int)(da[i] * 0.299 + da[i+1] * 0.587 + da[i+2] * 0.114);
                 lab += (int)(da[i] + da[i + 1] + da[i + 2]);
-                avR[da[i]]++;
-                avG[da[i + 1]]++;
-                avB[da[i + 2]]++;
             }
             bitmap.UnlockBits(bpdata);
 

@@ -224,22 +224,22 @@ namespace Diplom
                 MessageBox.Show(ex.Message, "Ошибка");
                 return;
             }
-            string newpath = listBox1.Items[listBox1.SelectedIndex].ToString().Substring(1);
-            //MessageBox.Show(newpath, "newpath");
-            string xyquery = @"SELECT MAX(X_point) AS max_x, MAX(Y_point) AS max_y FROM Spot_info WHERE ID_photo='" + newpath + "'";
-            OleDbCommand command = new OleDbCommand(xyquery, connection);
-            OleDbDataReader reader = command.ExecuteReader();
+            try {
+                string newpath = listBox1.Items[listBox1.SelectedIndex].ToString().Substring(1);
+                string xyquery = @"SELECT MAX(X_point) AS max_x, MAX(Y_point) AS max_y FROM Spot_info WHERE ID_photo='" + newpath + "'";
+                OleDbCommand command = new OleDbCommand(xyquery, connection);
+                OleDbDataReader reader = command.ExecuteReader();
 
-            reader.Read();
-            var x = (int)reader["max_x"];
-            var y = (int)reader["max_y"];
-            //MessageBox.Show("X:" + x + " Y:" + y);
-            Bitmap fromBase = new Bitmap(x+1, y+1);
+                reader.Read();
+                var x = (int)reader["max_x"];
+                var y = (int)reader["max_y"];
+                //MessageBox.Show("X:" + x + " Y:" + y);
+                Bitmap fromBase = new Bitmap(x + 1, y + 1);
 
-            string query = @"SELECT * FROM Spot_info WHERE ID_photo='" + newpath + "'";
-            command = new OleDbCommand(query, connection);
-            reader = command.ExecuteReader();
-            
+                string query = @"SELECT * FROM Spot_info WHERE ID_photo='" + newpath + "'";
+                command = new OleDbCommand(query, connection);
+                reader = command.ExecuteReader();
+                
 
             while (reader.Read())
             {
@@ -247,7 +247,7 @@ namespace Diplom
                 {
                     fromBase.SetPixel((int)reader["X_point"], (int)reader["Y_point"], Color.FromArgb(255, (int)reader["R"], (int)reader["G"], (int)reader["B"]));
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message + "\r\n" + "X:" + (int)reader["X_point"] + "\r\n" + "Y:" + (int)reader["Y_point"], "Ошибка присвоения цвета");
                 }
@@ -259,6 +259,12 @@ namespace Diplom
             chart1.Series[0].Points.Clear();
             chart2.Series[0].Points.Clear();
             chart3.Series[0].Points.Clear();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e) //Изменить яркость
@@ -286,6 +292,8 @@ namespace Diplom
             {
                 Color clr = Color.FromArgb(255, da[i], da[i + 1], da[i + 2]);
                 Color newclr = analyse.newBrightness(clr, avgBrightness);
+                analyse.setAvgColor(newclr);
+
                 da[i] = newclr.R;
                 da[i + 1] = newclr.G;
                 da[i + 2] = newclr.B;
