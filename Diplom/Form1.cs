@@ -177,6 +177,7 @@ namespace Diplom
 
         private void очиститьВсёToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (connectionString == "") { return; }
             dbCommand.Connection = connection;
             try
             {
@@ -332,6 +333,11 @@ namespace Diplom
 
         private void фотоToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if(connectionString == "")
+            {
+                MessageBox.Show("Создайте подключение к БД для дальнейшей работы", "Ошибка");
+                return;
+            }
             using (FolderBrowserDialog dialog = new FolderBrowserDialog())
             {
                 dialog.SelectedPath = progpath.Replace("Debug\\", "Release");
