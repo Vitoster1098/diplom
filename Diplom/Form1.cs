@@ -16,17 +16,25 @@ namespace Diplom
         }
 
         string progpath = AppDomain.CurrentDomain.BaseDirectory;
-        string connectionStringDefault = "";
-        string connectionString = @"", path = "";
+        string connectionString = "", path = "";
         private OleDbConnection connection;
         string[] exsamplesPath;
-        double q = 0, avgBrightness = 127.5;
+        double avgBrightness = 127.5;
+        Bitmap selBitmap = null;
         OleDbCommand dbCommand = new OleDbCommand();
         pixelAnalyse analyse = new pixelAnalyse();
+        bool[,] matrix;
 
         private void connect_Click(object sender, EventArgs e) //Соединение с БД
         {
-            makeConnection(textBox1.Text, connect_status);
+            if(connectionString == "")
+            {
+                базуДанныхToolStripMenuItem_Click(sender, e);
+            }
+            else
+            {
+                makeConnection(connectionString, connect_status);
+            }            
         }
         public void makeConnection(string newconnectionString, PictureBox status)
         {
@@ -36,6 +44,7 @@ namespace Diplom
                 connection.Open();
                 connectionString = newconnectionString;
                 status.BackColor = Color.Green;
+                conStatusLbl.Text = "Соединено с:" + connectionString;
             }
             catch (Exception ex)
             {
@@ -58,29 +67,10 @@ namespace Diplom
                 MessageBox.Show(ex.Message);
                 return;
             }
-            /*BitmapData bmpData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, image.PixelFormat);
-            IntPtr ptr = bmpData.Scan0;
-            int bytes = Math.Abs(bmpData.Stride) * image.Height;
-            byte[] rgbValues = new byte[bytes];
-            Marshal.Copy(ptr, rgbValues, 0, bytes);*/
 
             string query = "INSERT INTO Exsamples (Path, Diagnose) VALUES ('" + path + "', '" + diagnose + "')";
             dbCommand = new OleDbCommand(query, connection);
             dbCommand.ExecuteNonQuery();
-
-            //Пока не вспомнил как с маршал работать
-            /*for (int counter = 2; counter < rgbValues.Length; counter += 3)
-            {                          
-                if(rgbValues[counter-2] == 255 && rgbValues[counter-1] == 255 && rgbValues[counter] == 255)
-                {
-                    continue;
-                }
-                else
-                {
-                    addData(rgbValues[counter - 2], rgbValues[counter - 1], rgbValues[counter], path, diagnose, , );
-                }
-            }
-            image.UnlockBits(bmpData);*/
 
                     for (int i = 0; i < image.Width; ++i)
                     {
@@ -122,22 +112,23 @@ namespace Diplom
 
         private void disconnect_Click(object sender, EventArgs e) //Сброс соединения с БД
         {
-            connectionString = "";
-            try
+            if (connectionString == "") { return; }
+            else
             {
-                connection.Close();
-                connect_status.BackColor = Color.Red;
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Ошибка");
-            }            
-        }
-
-        private void default_connection_Click(object sender, EventArgs e) //Восстановление стандартного соединения
-        {
-            connection.Close();
-            makeConnection(connectionStringDefault, connect_status);
+                try
+                {
+                    connection.Close();
+                    connect_status.BackColor = Color.Red;
+                    listBox1.Items.Clear();
+                    conStatusLbl.Text = "Статус: нет соединения с БД";
+                    connectionString = "";
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Ошибка");
+                    return;
+                }
+            }                
         }
 
         private void fillListbox()
@@ -184,17 +175,6 @@ namespace Diplom
             return ret;
         }
 
-        private void Form1_Load(object sender, EventArgs e) //Старт программы
-        {
-            connectionStringDefault = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='" + progpath.Replace("Debug\\", "Release") + @"base.mdb'";
-            connectionString = connectionStringDefault;
-            connection = new OleDbConnection(connectionStringDefault);
-            textBox1.Text = connectionStringDefault;
-            makeConnection(textBox1.Text, connect_status);
-
-            fillListbox();
-        }
-
         private void очиститьВсёToolStripMenuItem_Click(object sender, EventArgs e)
         {
             dbCommand.Connection = connection;
@@ -214,7 +194,7 @@ namespace Diplom
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e) //клик по листбоксу
         {
-            //MessageBox.Show(progpath.ToString() + listBox1.Items[listBox1.SelectedIndex].ToString(), "Уведомление");
+            /*MessageBox.Show(progpath.ToString() + listBox1.Items[listBox1.SelectedIndex].ToString(), "Уведомление");
             try
             {
                 pictureBox1.Image = new Bitmap(progpath + listBox1.Items[listBox1.SelectedIndex]);
@@ -223,77 +203,115 @@ namespace Diplom
             {
                 MessageBox.Show(ex.Message, "Ошибка");
                 return;
-            }
-            try {
+            }*/
+            avgLabel.Text = "Средняя яркость:";
+            try 
+            {
                 string newpath = listBox1.Items[listBox1.SelectedIndex].ToString().Substring(1);
                 string xyquery = @"SELECT MAX(X_point) AS max_x, MAX(Y_point) AS max_y FROM Spot_info WHERE ID_photo='" + newpath + "'";
-                OleDbCommand command = new OleDbCommand(xyquery, connection);
-                OleDbDataReader reader = command.ExecuteReader();
+                dbCommand = new OleDbCommand(xyquery, connection);
+                OleDbDataReader reader = dbCommand.ExecuteReader();
 
                 reader.Read();
                 var x = (int)reader["max_x"];
                 var y = (int)reader["max_y"];
+                matrix = new bool[x+1, y+1];
                 //MessageBox.Show("X:" + x + " Y:" + y);
                 Bitmap fromBase = new Bitmap(x + 1, y + 1);
+                fromBase.MakeTransparent(Color.White);
 
                 string query = @"SELECT * FROM Spot_info WHERE ID_photo='" + newpath + "'";
-                command = new OleDbCommand(query, connection);
-                reader = command.ExecuteReader();
-                
+                dbCommand = new OleDbCommand(query, connection);
+                reader = dbCommand.ExecuteReader();
 
-            while (reader.Read())
-            {
-                try
+                while (reader.Read())
                 {
-                    fromBase.SetPixel((int)reader["X_point"], (int)reader["Y_point"], Color.FromArgb(255, (int)reader["R"], (int)reader["G"], (int)reader["B"]));
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message + "\r\n" + "X:" + (int)reader["X_point"] + "\r\n" + "Y:" + (int)reader["Y_point"], "Ошибка присвоения цвета");
-                }
-            }
+                    try
+                    {
+                        fromBase.SetPixel((int)reader["X_point"], (int)reader["Y_point"], Color.FromArgb(255, (int)reader["R"], (int)reader["G"], (int)reader["B"]));
+                        matrix[(int)reader["X_point"], (int)reader["Y_point"]] = true; //создаю массив точек, которые можно изменять
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message + "\r\n" + "X:" + (int)reader["X_point"] + "\r\n" + "Y:" + (int)reader["Y_point"], "Ошибка присвоения цвета");
+                    }
+                }                
 
-            pictureBox2.Image = fromBase;
-            avgBrightness = analyse.getAverageBrightness(new Bitmap(pictureBox1.Image));
+                pictureBox2.Image = fromBase;
+                selBitmap = fromBase;                
 
-            chart1.Series[0].Points.Clear();
-            chart2.Series[0].Points.Clear();
-            chart3.Series[0].Points.Clear();
+                avgBrightness = analyse.getAverageBrightness(selBitmap);
+                avgLabel.Text = "Средняя яркость: " + avgBrightness;
+
+                chart1.Series[0].Points.Clear();
+                chart2.Series[0].Points.Clear();
+                chart3.Series[0].Points.Clear();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
                 return;
             }
+            
+        }
+
+        private void базуДанныхToolStripMenuItem_Click(object sender, EventArgs e) //Открытие базы данных
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Filter = "Database files (*.mdb)|*.mdb|All files (*.*)|*.*";
+            if(fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source='" + fileDialog.FileName + "'";                
+                makeConnection(connectionString, connect_status);
+                fillListbox();
+            }
         }
 
         private void button1_Click(object sender, EventArgs e) //Изменить яркость
-        {
-            /*try
-            {
-                q = Convert.ToDouble(qField.Text);
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show("Ошибка: " + ex, "Ошибка");
-                return;
-            }*/
-            
+        {           
             avgLabel.Text ="Средняя яркость: " + avgBrightness;
-            Bitmap bitmap = new Bitmap(pictureBox2.Image);
 
-            BitmapData bpdata = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+            BitmapData bpdata = selBitmap.LockBits(new Rectangle(0, 0, selBitmap.Width, selBitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
             IntPtr intPtr = bpdata.Scan0;
 
-            byte[] da = new byte[(bitmap.Width * bitmap.Height) * 3];
+            byte[] da = new byte[(selBitmap.Width * selBitmap.Height) * 3];
             Marshal.Copy(intPtr, da, 0, da.Length);
             analyse.clearAvg();
 
-            for(int i = 0; i < da.Length - 1; i += 3)
+            //Здесь перевожу двумерный массив в одномерный с информацией о доступности изменения цвета
+            int[] changedPix = new int[da.Length];
+            int counter = 0;
+
+            for(int i = 0; i < matrix.GetLength(0); ++i)
             {
+                for(int j=0; j < matrix.GetLength(1); ++j)
+                {
+                    if (matrix[i, j])
+                    {
+                        changedPix[counter] = 1;
+                        changedPix[counter+1] = 1;
+                        changedPix[counter+2] = 1;
+                    }
+                    else
+                    {
+                        changedPix[counter] = 0;
+                        changedPix[counter + 1] = 0;
+                        changedPix[counter + 2] = 0;
+                    }
+                    counter++;
+                }
+            }
+
+            for (int i = 0; i < da.Length - 1; i += 3)
+            {                
                 Color clr = Color.FromArgb(255, da[i], da[i + 1], da[i + 2]);
-                Color newclr = analyse.newBrightness(clr, avgBrightness);
-                analyse.setAvgColor(newclr);
+                //MessageBox.Show("R:" + da[i] + " G:" + da[i + 1] + " B:" + da[i + 2]);
+                Color newclr = new Color();
+                if (changedPix[i] == 1)
+                {
+                    newclr = analyse.newBrightness(clr, avgBrightness);
+                    analyse.setAvgColor(newclr);
+                }             
 
                 da[i] = newclr.R;
                 da[i + 1] = newclr.G;
@@ -301,10 +319,15 @@ namespace Diplom
             }
 
             Marshal.Copy(da, 0, intPtr, da.Length);
-            bitmap.UnlockBits(bpdata);
-            pictureBox2.Image = bitmap;
+            selBitmap.UnlockBits(bpdata);
+            pictureBox2.Image = selBitmap;
 
             analyse.setRGB(chart1, chart2, chart3);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            //pictureBox2.BackColor = System.Drawing.Color.White;
         }
 
         private void фотоToolStripMenuItem_Click(object sender, EventArgs e)

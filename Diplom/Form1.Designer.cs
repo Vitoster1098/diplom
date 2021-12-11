@@ -42,19 +42,17 @@ namespace Diplom
             this.disconnect = new System.Windows.Forms.Button();
             this.connect_status = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.default_connection = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.conStatusLbl = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.открытьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.фотоToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.базуДанныхToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.очиститьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.очиститьВсёToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.label1 = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -64,7 +62,6 @@ namespace Diplom
             ((System.ComponentModel.ISupportInitialize)(this.connect_status)).BeginInit();
             this.panel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
@@ -107,36 +104,24 @@ namespace Diplom
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.panel1.Controls.Add(this.default_connection);
-            this.panel1.Controls.Add(this.textBox1);
+            this.panel1.Controls.Add(this.conStatusLbl);
             this.panel1.Controls.Add(this.connect);
             this.panel1.Controls.Add(this.connect_status);
             this.panel1.Controls.Add(this.disconnect);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 633);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1069, 32);
+            this.panel1.Size = new System.Drawing.Size(970, 32);
             this.panel1.TabIndex = 3;
             // 
-            // default_connection
+            // conStatusLbl
             // 
-            this.default_connection.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.default_connection.Location = new System.Drawing.Point(988, 4);
-            this.default_connection.Name = "default_connection";
-            this.default_connection.Size = new System.Drawing.Size(75, 23);
-            this.default_connection.TabIndex = 4;
-            this.default_connection.Text = "def con";
-            this.default_connection.UseVisualStyleBackColor = true;
-            this.default_connection.Click += new System.EventHandler(this.default_connection_Click);
-            // 
-            // textBox1
-            // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(140, 6);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(842, 20);
-            this.textBox1.TabIndex = 3;
+            this.conStatusLbl.AutoSize = true;
+            this.conStatusLbl.Location = new System.Drawing.Point(140, 8);
+            this.conStatusLbl.Name = "conStatusLbl";
+            this.conStatusLbl.Size = new System.Drawing.Size(155, 13);
+            this.conStatusLbl.TabIndex = 3;
+            this.conStatusLbl.Text = "Статус: нет соединения с БД";
             // 
             // menuStrip1
             // 
@@ -145,14 +130,15 @@ namespace Diplom
             this.очиститьToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1069, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(970, 24);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // открытьToolStripMenuItem
             // 
             this.открытьToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.фотоToolStripMenuItem});
+            this.фотоToolStripMenuItem,
+            this.базуДанныхToolStripMenuItem});
             this.открытьToolStripMenuItem.Name = "открытьToolStripMenuItem";
             this.открытьToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
             this.открытьToolStripMenuItem.Text = "Открыть";
@@ -160,9 +146,16 @@ namespace Diplom
             // фотоToolStripMenuItem
             // 
             this.фотоToolStripMenuItem.Name = "фотоToolStripMenuItem";
-            this.фотоToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.фотоToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.фотоToolStripMenuItem.Text = "Папку";
             this.фотоToolStripMenuItem.Click += new System.EventHandler(this.фотоToolStripMenuItem_Click);
+            // 
+            // базуДанныхToolStripMenuItem
+            // 
+            this.базуДанныхToolStripMenuItem.Name = "базуДанныхToolStripMenuItem";
+            this.базуДанныхToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.базуДанныхToolStripMenuItem.Text = "Базу данных";
+            this.базуДанныхToolStripMenuItem.Click += new System.EventHandler(this.базуДанныхToolStripMenuItem_Click);
             // 
             // очиститьToolStripMenuItem
             // 
@@ -185,7 +178,7 @@ namespace Diplom
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar1.Location = new System.Drawing.Point(0, 618);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(1069, 15);
+            this.progressBar1.Size = new System.Drawing.Size(970, 15);
             this.progressBar1.TabIndex = 5;
             // 
             // label1
@@ -202,45 +195,25 @@ namespace Diplom
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Location = new System.Drawing.Point(10, 61);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(170, 524);
+            this.listBox1.Size = new System.Drawing.Size(170, 550);
             this.listBox1.TabIndex = 7;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Location = new System.Drawing.Point(186, 61);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(242, 316);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.pictureBox1.TabIndex = 8;
-            this.pictureBox1.TabStop = false;
             // 
             // pictureBox2
             // 
             this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox2.Location = new System.Drawing.Point(434, 61);
+            this.pictureBox2.Location = new System.Drawing.Point(186, 61);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(242, 316);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pictureBox2.Size = new System.Drawing.Size(381, 316);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 9;
             this.pictureBox2.TabStop = false;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(183, 33);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(131, 13);
-            this.label2.TabIndex = 10;
-            this.label2.Text = "Изображение локально:";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(431, 33);
+            this.label3.Location = new System.Drawing.Point(183, 33);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(114, 13);
             this.label3.TabIndex = 11;
@@ -248,7 +221,7 @@ namespace Diplom
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(353, 383);
+            this.button1.Location = new System.Drawing.Point(186, 383);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 12;
@@ -262,7 +235,7 @@ namespace Diplom
             this.chart1.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
             this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(682, 64);
+            this.chart1.Location = new System.Drawing.Point(573, 61);
             this.chart1.Name = "chart1";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
@@ -277,7 +250,7 @@ namespace Diplom
             // avgLabel
             // 
             this.avgLabel.AutoSize = true;
-            this.avgLabel.Location = new System.Drawing.Point(434, 388);
+            this.avgLabel.Location = new System.Drawing.Point(267, 388);
             this.avgLabel.Name = "avgLabel";
             this.avgLabel.Size = new System.Drawing.Size(97, 13);
             this.avgLabel.TabIndex = 14;
@@ -289,7 +262,7 @@ namespace Diplom
             this.chart2.ChartAreas.Add(chartArea2);
             legend2.Name = "Legend1";
             this.chart2.Legends.Add(legend2);
-            this.chart2.Location = new System.Drawing.Point(186, 413);
+            this.chart2.Location = new System.Drawing.Point(573, 262);
             this.chart2.Name = "chart2";
             series2.ChartArea = "ChartArea1";
             series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
@@ -307,7 +280,7 @@ namespace Diplom
             this.chart3.ChartAreas.Add(chartArea3);
             legend3.Name = "Legend1";
             this.chart3.Legends.Add(legend3);
-            this.chart3.Location = new System.Drawing.Point(573, 413);
+            this.chart3.Location = new System.Drawing.Point(186, 412);
             this.chart3.Name = "chart3";
             series3.ChartArea = "ChartArea1";
             series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
@@ -323,16 +296,14 @@ namespace Diplom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1069, 665);
+            this.ClientSize = new System.Drawing.Size(970, 665);
             this.Controls.Add(this.chart3);
             this.Controls.Add(this.chart2);
             this.Controls.Add(this.avgLabel);
             this.Controls.Add(this.chart1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.progressBar1);
@@ -349,7 +320,6 @@ namespace Diplom
             this.panel1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
@@ -365,8 +335,6 @@ namespace Diplom
         private System.Windows.Forms.Button disconnect;
         private System.Windows.Forms.PictureBox connect_status;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button default_connection;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem открытьToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem фотоToolStripMenuItem;
@@ -375,15 +343,15 @@ namespace Diplom
         private System.Windows.Forms.ToolStripMenuItem очиститьВсёToolStripMenuItem;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
         private System.Windows.Forms.Label avgLabel;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart3;
+        private System.Windows.Forms.ToolStripMenuItem базуДанныхToolStripMenuItem;
+        private System.Windows.Forms.Label conStatusLbl;
     }
 }
 

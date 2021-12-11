@@ -12,10 +12,20 @@ namespace Diplom
 {
     class pixelAnalyse
     {
-        public Dictionary<string, Bitmap> map = new Dictionary<string, Bitmap>();
+        private Bitmap bitmap;
         public int[] avR = new int[256];
         public int[] avG = new int[256];
         public int[] avB = new int[256];
+
+        public pixelAnalyse()
+        {
+
+        }
+
+        public pixelAnalyse(Bitmap bitmap)
+        {
+            this.bitmap = bitmap;
+        }
 
         public void setAvgColor(Color avg)
         {
@@ -31,14 +41,14 @@ namespace Diplom
             for (int i = 0; i < avB.Length - 1; avB[i++] = 0) { }
         }
 
-        public void addPictures(string path, Bitmap picture)
+        public void setBitmap(Bitmap picture)
         {
-            map.Add(path, picture);
+            bitmap = new Bitmap(picture);
         }
 
-        public Bitmap getPicture(string path)
+        public Bitmap getBitmap()
         {
-            return map[path];
+            return bitmap;
         }
 
         /*public static UInt32 Brightness(UInt32 point, int poz, int lenght) //poz - значение ползунка, length - максимальное значение ползунка
@@ -102,21 +112,46 @@ namespace Diplom
 
         public Color newBrightness(Color point, double q)
         {
-            byte R, G, B;
-            q = 127.5 / q;
-            R = (byte)(point.R + q);
-            G = (byte)(point.G + q);
-            B = (byte)(point.B + q);
+            double R = 0, G = 0, B = 0;
+            int[] mx = { point.R, point.G, point.B };
+            int max_color = mx.Max();
+            double q_new = 127.5 / q;
 
-            //контролируем переполнение переменных
-            if (R < 0) R = 0;
-            if (R > 255) R = 255;
-            if (G < 0) G = 0;
-            if (G > 255) G = 255;
-            if (B < 0) B = 0;
-            if (B > 255) B = 255;
+            if(max_color * q_new > 255)
+            {
+                try //Деление на 0
+                {
+                    R = 255 / point.R;
+                }
+                catch(Exception)
+                {
+                    R = 0;
+                }
+                try
+                {
+                    G = 255 / point.G;
+                }
+                catch (Exception)
+                {
+                    G = 0;
+                }
+                try
+                {
+                    B = 255 / point.B;
+                }
+                catch (Exception)
+                {
+                    B = 0;
+                }
+            }
+            else
+            {
+                R = point.R * q_new;
+                G = point.G * q_new;
+                B = point.B * q_new;
+            }            
 
-            Color newColor = Color.FromArgb(255, R, G, B);
+            Color newColor = Color.FromArgb(255, (int)R, (int)G, (int)B);
             return newColor;
         }
 
