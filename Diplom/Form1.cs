@@ -205,7 +205,6 @@ namespace Diplom
                 MessageBox.Show(ex.Message, "Ошибка");
                 return;
             }*/
-            avgLabel.Text = "Средняя яркость:";
             try 
             {
                 string newpath = listBox1.Items[listBox1.SelectedIndex].ToString().Substring(1);
@@ -217,9 +216,10 @@ namespace Diplom
                 var x = (int)reader["max_x"];
                 var y = (int)reader["max_y"];
                 matrix = new bool[x+1, y+1];
-                //MessageBox.Show("X:" + x + " Y:" + y);
+                
                 Bitmap fromBase = new Bitmap(x + 1, y + 1);
-                fromBase.MakeTransparent(Color.White);
+                Graphics graphics = Graphics.FromImage(fromBase);
+                graphics.Clear(Color.White);
 
                 string query = @"SELECT * FROM Spot_info WHERE ID_photo='" + newpath + "'";
                 dbCommand = new OleDbCommand(query, connection);
@@ -230,7 +230,11 @@ namespace Diplom
                     try
                     {
                         fromBase.SetPixel((int)reader["X_point"], (int)reader["Y_point"], Color.FromArgb(255, (int)reader["R"], (int)reader["G"], (int)reader["B"]));
-                        matrix[(int)reader["X_point"], (int)reader["Y_point"]] = true; //создаю массив точек, которые можно изменять
+                        if((int)reader["R"] != 255 && (int)reader["G"] != 255 && (int)reader["B"] != 255)
+                        {
+                            matrix[(int)reader["X_point"], (int)reader["Y_point"]] = true; //создаю массив точек, которые можно изменять
+                        }
+                        
                     }
                     catch (Exception ex)
                     {
@@ -242,7 +246,7 @@ namespace Diplom
                 selBitmap = fromBase;                
 
                 avgBrightness = analyse.getAverageBrightness(selBitmap);
-                avgLabel.Text = "Средняя яркость: " + avgBrightness;
+                avgLabel.Text = "Средняя яркость: " + Math.Round(avgBrightness, 2);
 
                 chart1.Series[0].Points.Clear();
                 chart2.Series[0].Points.Clear();
@@ -269,61 +273,26 @@ namespace Diplom
         }
 
         private void button1_Click(object sender, EventArgs e) //Изменить яркость
-        {           
-            avgLabel.Text ="Средняя яркость: " + avgBrightness;
+        {               
+            analyse = new pixelAnalyse(selBitmap);
+            analyse.setMatrix(matrix);
 
-            BitmapData bpdata = selBitmap.LockBits(new Rectangle(0, 0, selBitmap.Width, selBitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
-            IntPtr intPtr = bpdata.Scan0;
-
-            byte[] da = new byte[(selBitmap.Width * selBitmap.Height) * 3];
-            Marshal.Copy(intPtr, da, 0, da.Length);
-            analyse.clearAvg();
-
-            //Здесь перевожу двумерный массив в одномерный с информацией о доступности изменения цвета
-            int[] changedPix = new int[da.Length];
-            int counter = 0;
-
-            for(int i = 0; i < matrix.GetLength(0); ++i)
+            try
             {
-                for(int j=0; j < matrix.GetLength(1); ++j)
-                {
-                    if (matrix[i, j])
-                    {
-                        changedPix[counter] = 1;
-                        changedPix[counter+1] = 1;
-                        changedPix[counter+2] = 1;
-                    }
-                    else
-                    {
-                        changedPix[counter] = 0;
-                        changedPix[counter + 1] = 0;
-                        changedPix[counter + 2] = 0;
-                    }
-                    counter++;
-                }
+                analyse.changeBrightness();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка задания новой яркости");
+                return;
             }
 
-            for (int i = 0; i < da.Length - 1; i += 3)
-            {                
-                Color clr = Color.FromArgb(255, da[i], da[i + 1], da[i + 2]);
-                //MessageBox.Show("R:" + da[i] + " G:" + da[i + 1] + " B:" + da[i + 2]);
-                Color newclr = new Color();
-                if (changedPix[i] == 1)
-                {
-                    newclr = analyse.newBrightness(clr, avgBrightness);
-                    analyse.setAvgColor(newclr);
-                }             
-
-                da[i] = newclr.R;
-                da[i + 1] = newclr.G;
-                da[i + 2] = newclr.B;
-            }
-
-            Marshal.Copy(da, 0, intPtr, da.Length);
-            selBitmap.UnlockBits(bpdata);
+            selBitmap = new Bitmap(analyse.getBitmap());
             pictureBox2.Image = selBitmap;
 
             analyse.setRGB(chart1, chart2, chart3);
+            avgBrightness = analyse.getAverageBrightness(selBitmap);
+            avgLabel.Text = "Средняя яркость: " + Math.Round(avgBrightness, 2);
         }
 
         private void Form1_Load(object sender, EventArgs e)
