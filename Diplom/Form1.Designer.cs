@@ -111,7 +111,7 @@ namespace Diplom
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 633);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(970, 32);
+            this.panel1.Size = new System.Drawing.Size(1068, 32);
             this.panel1.TabIndex = 3;
             // 
             // conStatusLbl
@@ -130,7 +130,7 @@ namespace Diplom
             this.очиститьToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(970, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1068, 24);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -178,7 +178,7 @@ namespace Diplom
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar1.Location = new System.Drawing.Point(0, 618);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(970, 15);
+            this.progressBar1.Size = new System.Drawing.Size(1068, 15);
             this.progressBar1.TabIndex = 5;
             // 
             // label1
@@ -195,7 +195,7 @@ namespace Diplom
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Location = new System.Drawing.Point(10, 61);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(170, 550);
+            this.listBox1.Size = new System.Drawing.Size(243, 550);
             this.listBox1.TabIndex = 7;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
@@ -203,7 +203,7 @@ namespace Diplom
             // 
             this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox2.Location = new System.Drawing.Point(186, 61);
+            this.pictureBox2.Location = new System.Drawing.Point(259, 65);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(381, 316);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -221,7 +221,7 @@ namespace Diplom
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(186, 383);
+            this.button1.Location = new System.Drawing.Point(259, 387);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 12;
@@ -235,7 +235,7 @@ namespace Diplom
             this.chart1.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
             this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(573, 61);
+            this.chart1.Location = new System.Drawing.Point(646, 65);
             this.chart1.Name = "chart1";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
@@ -250,7 +250,7 @@ namespace Diplom
             // avgLabel
             // 
             this.avgLabel.AutoSize = true;
-            this.avgLabel.Location = new System.Drawing.Point(267, 388);
+            this.avgLabel.Location = new System.Drawing.Point(340, 392);
             this.avgLabel.Name = "avgLabel";
             this.avgLabel.Size = new System.Drawing.Size(97, 13);
             this.avgLabel.TabIndex = 14;
@@ -262,7 +262,7 @@ namespace Diplom
             this.chart2.ChartAreas.Add(chartArea2);
             legend2.Name = "Legend1";
             this.chart2.Legends.Add(legend2);
-            this.chart2.Location = new System.Drawing.Point(573, 262);
+            this.chart2.Location = new System.Drawing.Point(646, 266);
             this.chart2.Name = "chart2";
             series2.ChartArea = "ChartArea1";
             series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
@@ -280,7 +280,7 @@ namespace Diplom
             this.chart3.ChartAreas.Add(chartArea3);
             legend3.Name = "Legend1";
             this.chart3.Legends.Add(legend3);
-            this.chart3.Location = new System.Drawing.Point(186, 412);
+            this.chart3.Location = new System.Drawing.Point(259, 416);
             this.chart3.Name = "chart3";
             series3.ChartArea = "ChartArea1";
             series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
@@ -296,7 +296,7 @@ namespace Diplom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(970, 665);
+            this.ClientSize = new System.Drawing.Size(1068, 665);
             this.Controls.Add(this.chart3);
             this.Controls.Add(this.chart2);
             this.Controls.Add(this.avgLabel);

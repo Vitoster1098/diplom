@@ -23,7 +23,6 @@ namespace Diplom
         Bitmap selBitmap = null;
         OleDbCommand dbCommand = new OleDbCommand();
         pixelAnalyse analyse = new pixelAnalyse();
-        bool[,] matrix;
 
         private void connect_Click(object sender, EventArgs e) //Соединение с БД
         {
@@ -72,16 +71,16 @@ namespace Diplom
             dbCommand = new OleDbCommand(query, connection);
             dbCommand.ExecuteNonQuery();
 
-                    for (int i = 0; i < image.Width; ++i)
-                    {
-                        for (int j = 0; j < image.Height; ++j)
-                        {
-                            if (image.GetPixel(i, j).R == 255 && image.GetPixel(i, j).G == 255 && image.GetPixel(i, j).B == 255)
-                                continue;
-                            else
-                                addData(image.GetPixel(i, j).R, image.GetPixel(i, j).G, image.GetPixel(i, j).B, path, diagnose, i, j);
-                        }
-                    }
+            for (int i = 0; i < image.Width; ++i)
+            {
+                for (int j = 0; j < image.Height; ++j)
+                {
+                    if (image.GetPixel(i, j).R == 255 && image.GetPixel(i, j).G == 255 && image.GetPixel(i, j).B == 255)
+                        continue;
+                    else
+                        addData(image.GetPixel(i, j).R, image.GetPixel(i, j).G, image.GetPixel(i, j).B, path, diagnose, i, j);
+                }
+            }
         }
 
         void addData(byte R, byte G, byte B, string path, string diagnose, int x, int y) //Заполнение информации о пикселях изображений
@@ -207,45 +206,35 @@ namespace Diplom
             }*/
             try 
             {
-                string newpath = listBox1.Items[listBox1.SelectedIndex].ToString().Substring(1);
-                string xyquery = @"SELECT MAX(X_point) AS max_x, MAX(Y_point) AS max_y FROM Spot_info WHERE ID_photo='" + newpath + "'";
-                dbCommand = new OleDbCommand(xyquery, connection);
-                OleDbDataReader reader = dbCommand.ExecuteReader();
-
-                reader.Read();
-                var x = (int)reader["max_x"];
-                var y = (int)reader["max_y"];
-                matrix = new bool[x+1, y+1];
-                
-                Bitmap fromBase = new Bitmap(x + 1, y + 1);
-                Graphics graphics = Graphics.FromImage(fromBase);
-                graphics.Clear(Color.White);
+                string newpath = listBox1.Items[listBox1.SelectedIndex].ToString().Substring(1);               
 
                 string query = @"SELECT * FROM Spot_info WHERE ID_photo='" + newpath + "'";
                 dbCommand = new OleDbCommand(query, connection);
-                reader = dbCommand.ExecuteReader();
+                OleDbDataReader reader = dbCommand.ExecuteReader();
+
+                analyse = new pixelAnalyse();
 
                 while (reader.Read())
                 {
                     try
                     {
-                        fromBase.SetPixel((int)reader["X_point"], (int)reader["Y_point"], Color.FromArgb(255, (int)reader["R"], (int)reader["G"], (int)reader["B"]));
-                        if((int)reader["R"] != 255 && (int)reader["G"] != 255 && (int)reader["B"] != 255)
-                        {
-                            matrix[(int)reader["X_point"], (int)reader["Y_point"]] = true; //создаю массив точек, которые можно изменять
-                        }
-                        
+                        //fromBase.SetPixel((int)reader["X_point"], (int)reader["Y_point"], Color.FromArgb(255, (int)reader["R"], (int)reader["G"], (int)reader["B"]));
+                        analyse.setInfo(new Point((int)reader["X_point"], (int)reader["Y_point"]), Color.FromArgb(255, (int)reader["R"], (int)reader["G"], (int)reader["B"]));
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show(ex.Message + "\r\n" + "X:" + (int)reader["X_point"] + "\r\n" + "Y:" + (int)reader["Y_point"], "Ошибка присвоения цвета");
                     }
-                }                
+                }
 
-                pictureBox2.Image = fromBase;
-                selBitmap = fromBase;                
+                Bitmap fromBase = new Bitmap(analyse.getMax(true) + 1, analyse.getMax(false) + 1);
+                Graphics graphics = Graphics.FromImage(fromBase);
+                graphics.Clear(Color.White);
 
-                avgBrightness = analyse.getAverageBrightness(selBitmap);
+                selBitmap = analyse.getBitmapByInfo(fromBase);
+                pictureBox2.Image = selBitmap;            
+
+                avgBrightness = analyse.getAverageBrightness();
                 avgLabel.Text = "Средняя яркость: " + Math.Round(avgBrightness, 2);
 
                 chart1.Series[0].Points.Clear();
@@ -256,8 +245,7 @@ namespace Diplom
             {
                 MessageBox.Show(ex.Message);
                 return;
-            }
-            
+            }            
         }
 
         private void базуДанныхToolStripMenuItem_Click(object sender, EventArgs e) //Открытие базы данных
@@ -274,8 +262,7 @@ namespace Diplom
 
         private void button1_Click(object sender, EventArgs e) //Изменить яркость
         {               
-            analyse = new pixelAnalyse(selBitmap);
-            analyse.setMatrix(matrix);
+            if(analyse.data.Length == 1) { return; }
 
             try
             {
@@ -287,11 +274,11 @@ namespace Diplom
                 return;
             }
 
-            selBitmap = new Bitmap(analyse.getBitmap());
+            selBitmap = new Bitmap(analyse.getBitmapByInfo(new Bitmap(selBitmap.Width, selBitmap.Height)));
             pictureBox2.Image = selBitmap;
 
             analyse.setRGB(chart1, chart2, chart3);
-            avgBrightness = analyse.getAverageBrightness(selBitmap);
+            avgBrightness = analyse.getAverageBrightness();
             avgLabel.Text = "Средняя яркость: " + Math.Round(avgBrightness, 2);
         }
 
