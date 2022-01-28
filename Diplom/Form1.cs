@@ -3,8 +3,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Data.OleDb;
 using System.IO;
-using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
 
 namespace Diplom
 {
@@ -130,7 +128,7 @@ namespace Diplom
             }                
         }
 
-        private void fillListbox()
+        private void fillListbox() //Формирует список имен файлов с бд
         {
             exsamplesPath = GetPath();
         }
@@ -174,7 +172,7 @@ namespace Diplom
             return ret;
         }
 
-        private void очиститьВсёToolStripMenuItem_Click(object sender, EventArgs e)
+        private void очиститьВсёToolStripMenuItem_Click(object sender, EventArgs e) //Полное удаление данных в бд
         {
             if (connectionString == "") { return; }
             dbCommand.Connection = connection;
@@ -236,10 +234,6 @@ namespace Diplom
 
                 avgBrightness = analyse.getAverageBrightness();
                 avgLabel.Text = "Средняя яркость: " + Math.Round(avgBrightness, 2);
-
-                chart1.Series[0].Points.Clear();
-                chart2.Series[0].Points.Clear();
-                chart3.Series[0].Points.Clear();
             }
             catch (Exception ex)
             {
@@ -262,7 +256,7 @@ namespace Diplom
 
         private void button1_Click(object sender, EventArgs e) //Изменить яркость
         {               
-            if(analyse.data.Length == 1) { return; }
+            if(analyse.data.Length == 1) { return; } //если не заполняли данными - остановка
 
             try
             {
@@ -274,7 +268,7 @@ namespace Diplom
                 return;
             }
 
-            selBitmap = new Bitmap(analyse.getBitmapByInfo(new Bitmap(selBitmap.Width, selBitmap.Height)));
+            selBitmap = new Bitmap(analyse.getBitmapByInfo(new Bitmap(selBitmap.Width, selBitmap.Height))); //получение битмапа на основе данных из бд
             pictureBox2.Image = selBitmap;
 
             analyse.setRGB(chart1, chart2, chart3);
@@ -282,12 +276,7 @@ namespace Diplom
             avgLabel.Text = "Средняя яркость: " + Math.Round(avgBrightness, 2);
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            //pictureBox2.BackColor = System.Drawing.Color.White;
-        }
-
-        private void фотоToolStripMenuItem_Click(object sender, EventArgs e)
+        private void фотоToolStripMenuItem_Click(object sender, EventArgs e) //Загрузить новые экземпляры в бд
         {
             if(connectionString == "")
             {

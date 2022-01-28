@@ -314,7 +314,6 @@ namespace Diplom
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "Анализ фото";
-            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.connect_status)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
