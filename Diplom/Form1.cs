@@ -20,7 +20,7 @@ namespace Diplom
         double avgBrightness = 127.5;
         Bitmap selBitmap = null;
         OleDbCommand dbCommand = new OleDbCommand();
-        pixelAnalyse analyse = new pixelAnalyse();
+        pixelAnalyse analyse;
 
         private void connect_Click(object sender, EventArgs e) //Соединение с БД
         {
@@ -50,6 +50,18 @@ namespace Diplom
                 status.BackColor = Color.Red;
                 return;
             }            
+        }
+
+        public void clearForms()
+        {
+            chart1.Series[0].Points.Clear();
+            chart2.Series[0].Points.Clear();
+            chart3.Series[0].Points.Clear();
+
+            pictureBox2.Image.Dispose();
+            pictureBox2.Image = null;
+            progressBar1.Value = 0;
+            avgLabel.Text = "Средняя яркость:";
         }
 
         public void ScanFile(string path, string diagnose="Меланома")
@@ -110,22 +122,20 @@ namespace Diplom
         private void disconnect_Click(object sender, EventArgs e) //Сброс соединения с БД
         {
             if (connectionString == "") { return; }
-            else
+            try
             {
-                try
-                {
-                    connection.Close();
-                    connect_status.BackColor = Color.Red;
-                    listBox1.Items.Clear();
-                    conStatusLbl.Text = "Статус: нет соединения с БД";
-                    connectionString = "";
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Ошибка");
-                    return;
-                }
-            }                
+                connection.Close();
+                connect_status.BackColor = Color.Red;
+                listBox1.Items.Clear();
+                conStatusLbl.Text = "Статус: нет соединения с БД";
+                connectionString = "";
+                clearForms();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка");
+                return;
+            }           
         }
 
         private void fillListbox() //Формирует список имен файлов с бд
@@ -144,7 +154,7 @@ namespace Diplom
 
             command = new OleDbCommand(query, connection);
             reader = command.ExecuteReader();
-            int count = 0;
+
             string[] ret = new string[rowCount];
             listBox1.Items.Clear();
 
@@ -159,8 +169,7 @@ namespace Diplom
                     while (reader.Read())
                     {
                         listBox1.Items.Add('\\' + reader["Path"].ToString());
-                        ret[count] = '\\' + reader["Path"].ToString();
-                        count++;
+                        ret[listBox1.Items.Count-1] = '\\' + reader["Path"].ToString();
                     }
                 }
             }
@@ -192,16 +201,7 @@ namespace Diplom
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e) //клик по листбоксу
         {
-            /*MessageBox.Show(progpath.ToString() + listBox1.Items[listBox1.SelectedIndex].ToString(), "Уведомление");
-            try
-            {
-                pictureBox1.Image = new Bitmap(progpath + listBox1.Items[listBox1.SelectedIndex]);
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Ошибка");
-                return;
-            }*/
+            //MessageBox.Show(progpath.ToString() + listBox1.Items[listBox1.SelectedIndex].ToString(), "Уведомление");
             try 
             {
                 string newpath = listBox1.Items[listBox1.SelectedIndex].ToString().Substring(1);               
@@ -210,13 +210,12 @@ namespace Diplom
                 dbCommand = new OleDbCommand(query, connection);
                 OleDbDataReader reader = dbCommand.ExecuteReader();
 
-                analyse = new pixelAnalyse();
+                analyse = new pixelAnalyse(progressBar1); //очистка
 
                 while (reader.Read())
                 {
                     try
                     {
-                        //fromBase.SetPixel((int)reader["X_point"], (int)reader["Y_point"], Color.FromArgb(255, (int)reader["R"], (int)reader["G"], (int)reader["B"]));
                         analyse.setInfo(new Point((int)reader["X_point"], (int)reader["Y_point"]), Color.FromArgb(255, (int)reader["R"], (int)reader["G"], (int)reader["B"]));
                     }
                     catch (Exception ex)
@@ -226,14 +225,18 @@ namespace Diplom
                 }
 
                 Bitmap fromBase = new Bitmap(analyse.getMax(true) + 1, analyse.getMax(false) + 1);
-                Graphics graphics = Graphics.FromImage(fromBase);
-                graphics.Clear(Color.White);
+                /*Graphics graphics = Graphics.FromImage(fromBase);
+                graphics.Clear(Color.White);*/
 
                 selBitmap = analyse.getBitmapByInfo(fromBase);
                 pictureBox2.Image = selBitmap;            
 
                 avgBrightness = analyse.getAverageBrightness();
                 avgLabel.Text = "Средняя яркость: " + Math.Round(avgBrightness, 2);
+
+                chart1.Series[0].Points.Clear();
+                chart2.Series[0].Points.Clear();
+                chart3.Series[0].Points.Clear();
             }
             catch (Exception ex)
             {
@@ -274,6 +277,16 @@ namespace Diplom
             analyse.setRGB(chart1, chart2, chart3);
             avgBrightness = analyse.getAverageBrightness();
             avgLabel.Text = "Средняя яркость: " + Math.Round(avgBrightness, 2);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            analyse = new pixelAnalyse(progressBar1);
+        }
+
+        private void очиститьПоляToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            clearForms();
         }
 
         private void фотоToolStripMenuItem_Click(object sender, EventArgs e) //Загрузить новые экземпляры в бд

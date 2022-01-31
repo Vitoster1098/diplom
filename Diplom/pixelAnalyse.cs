@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
 namespace Diplom
@@ -14,6 +15,8 @@ namespace Diplom
         public int[] avB = new int[256];
 
         public Info[] data = new Info[1];
+
+        ProgressBar bar = null;
 
         public struct Info //Хранение данных о месте на битмап и его цвета
         {
@@ -43,9 +46,9 @@ namespace Diplom
             }
         }
 
-        public pixelAnalyse()
+        public pixelAnalyse(ProgressBar bar)
         {
-
+            this.bar = bar;
         }
 
         public Bitmap getBitmap()
@@ -101,9 +104,13 @@ namespace Diplom
 
         public Bitmap getBitmapByInfo(Bitmap temp) //на основе данных структуры формирует и возвращает битмап (на входе данные о размере битмапа)
         {
+            bar.Maximum = data.Count();
+            bar.Value = 1;
+
             for(int i = 0; i < data.Length - 1; i++)
             {
                 temp.SetPixel(data[i].getPoint().X, data[i].getPoint().Y, data[i].getColor());
+                bar.Value++;
             }
             this.bitmap = temp;
             return temp;
@@ -149,11 +156,15 @@ namespace Diplom
             avgBrightness = getAverageBrightness();
             clearAvg();
 
+            bar.Maximum = data.Count();
+            bar.Value = 1;
+
             for (int i = 0; i < data.Length - 1; i++)
             {
                 Color newclr = newBrightness(data[i].getColor(), avgBrightness);
                 setAvgColor(newclr);
                 data[i].setColor(newclr);
+                bar.Value++;
             }
         }
 
