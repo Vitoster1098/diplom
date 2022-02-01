@@ -10,9 +10,9 @@ namespace Diplom
     {
         private Bitmap bitmap = new Bitmap(100, 100);
         private double avgBrightness = 0;
-        public int[] avR = new int[256];
-        public int[] avG = new int[256];
-        public int[] avB = new int[256];
+        public double[] avR = new double[256];
+        public double[] avG = new double[256];
+        public double[] avB = new double[256];
 
         public Info[] data = new Info[1];
 
@@ -168,7 +168,7 @@ namespace Diplom
             }
         }
 
-        public void setRGB(Chart r, Chart g, Chart b) //отрисовка гистограмм
+        public void setRGB(Chart r, Chart g, Chart b, Chart rgb) //отрисовка гистограмм
         {
             r.Series[0].Points.Clear();
             g.Series[0].Points.Clear();
@@ -176,9 +176,12 @@ namespace Diplom
 
             for (int i = 0; i < avR.Length - 1; ++i)
             {
-                r.Series[0].Points.AddXY(i, avR[i]);
-                g.Series[0].Points.AddXY(i, avG[i]);
-                b.Series[0].Points.AddXY(i, avB[i]);
+                r.Series[0].Points.AddXY(i, avR[i] / data.Length);
+                g.Series[0].Points.AddXY(i, avG[i] / data.Length);
+                b.Series[0].Points.AddXY(i, avB[i] / data.Length);
+                rgb.Series[0].Points.AddXY(i, avR[i] / data.Length);
+                rgb.Series[1].Points.AddXY(i, avG[i] / data.Length);
+                rgb.Series[2].Points.AddXY(i, avB[i] / data.Length);
             }            
         }
 

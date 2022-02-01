@@ -274,7 +274,7 @@ namespace Diplom
             selBitmap = new Bitmap(analyse.getBitmapByInfo(new Bitmap(selBitmap.Width, selBitmap.Height))); //получение битмапа на основе данных из бд
             pictureBox2.Image = selBitmap;
 
-            analyse.setRGB(chart1, chart2, chart3);
+            analyse.setRGB(chart1, chart2, chart3, chart4);
             avgBrightness = analyse.getAverageBrightness();
             avgLabel.Text = "Средняя яркость: " + Math.Round(avgBrightness, 2);
         }
@@ -282,6 +282,26 @@ namespace Diplom
         private void Form1_Load(object sender, EventArgs e)
         {
             analyse = new pixelAnalyse(progressBar1);
+
+            chart1.ChartAreas[0].CursorX.IsUserEnabled = true;
+            chart1.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
+            chart1.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
+            chart1.ChartAreas[0].AxisX.ScrollBar.IsPositionedInside = true;
+
+            chart2.ChartAreas[0].CursorX.IsUserEnabled = true;
+            chart2.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
+            chart2.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
+            chart2.ChartAreas[0].AxisX.ScrollBar.IsPositionedInside = true;
+
+            chart3.ChartAreas[0].CursorX.IsUserEnabled = true;
+            chart3.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
+            chart3.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
+            chart3.ChartAreas[0].AxisX.ScrollBar.IsPositionedInside = true;
+
+            chart4.ChartAreas[0].CursorX.IsUserEnabled = true;
+            chart4.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
+            chart4.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
+            chart4.ChartAreas[0].AxisX.ScrollBar.IsPositionedInside = true;
         }
 
         private void очиститьПоляToolStripMenuItem_Click(object sender, EventArgs e)
