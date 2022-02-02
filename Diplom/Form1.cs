@@ -210,7 +210,7 @@ namespace Diplom
                 dbCommand = new OleDbCommand(query, connection);
                 OleDbDataReader reader = dbCommand.ExecuteReader();
 
-                analyse = new pixelAnalyse(progressBar1); //очистка
+                analyse = new pixelAnalyse(progressBar1, avR, avG, avB); //очистка
 
                 while (reader.Read())
                 {
@@ -233,10 +233,16 @@ namespace Diplom
 
                 avgBrightness = analyse.getAverageBrightness();
                 avgLabel.Text = "Средняя яркость: " + Math.Round(avgBrightness, 2);
+                avR.Text = "Среднее R: " + Math.Round(analyse.getAverageGistogramm("R"), 3);
+                avG.Text = "Среднее G: " + Math.Round(analyse.getAverageGistogramm("G"), 3);
+                avB.Text = "Среднее B: " + Math.Round(analyse.getAverageGistogramm("B"), 3);
 
                 chart1.Series[0].Points.Clear();
                 chart2.Series[0].Points.Clear();
                 chart3.Series[0].Points.Clear();
+                chart4.Series[0].Points.Clear();
+                chart4.Series[1].Points.Clear();
+                chart4.Series[2].Points.Clear();
             }
             catch (Exception ex)
             {
@@ -281,7 +287,7 @@ namespace Diplom
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            analyse = new pixelAnalyse(progressBar1);
+            analyse = new pixelAnalyse(progressBar1, avR, avG, avB);
 
             chart1.ChartAreas[0].CursorX.IsUserEnabled = true;
             chart1.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
@@ -307,6 +313,68 @@ namespace Diplom
         private void очиститьПоляToolStripMenuItem_Click(object sender, EventArgs e)
         {
             clearForms();
+        }
+
+        private void сохранитьГистограммToolStripMenuItem_Click(object sender, EventArgs e) //Сохранить данные гистограммы в БД
+        {
+            if(analyse.data.Length == 1) { return; }           
+            string ID_photo = listBox1.SelectedItem.ToString().Substring(1);
+
+            string query = "SELECT COUNT(*) FROM Gist_info WHERE ID_photo='" + ID_photo + "'";
+            dbCommand = new OleDbCommand(query, connection);
+            OleDbDataReader reader = dbCommand.ExecuteReader();
+
+            if (reader.HasRows)
+            {
+                MessageBox.Show("В БД уже есть информация о гистограммах к этому изображению", "Ошибка");
+                return;
+            }
+
+            string R = (analyse.avR[0]).ToString(), 
+                G = (analyse.avG[0]).ToString(), 
+                B = (analyse.avB[0]).ToString();
+
+            for(int i = 1; i < analyse.avR.Length - 1; ++i)
+            {
+                R += ":" + analyse.avR[i];
+                G += ":" + analyse.avG[i];
+                B += ":" + analyse.avB[i];
+            }
+            string avBright = "";
+            avBright = avR.Text.Substring(10) + ":" + avG.Text.Substring(10) + ":" + avB.Text.Substring(10);
+
+            query = "INSERT INTO Gist_info (ID_photo, gistR, gistG, gistB, avBright) "
+               + "VALUES ('" + ID_photo + "', '" + R + "', '" + G + "', '" + B + "', '" + avBright + "')";
+            dbCommand = new OleDbCommand(query, connection);
+            dbCommand.ExecuteNonQuery();
+        }
+
+        private void загрузитьToolStripMenuItem_Click(object sender, EventArgs e) //Загрузить данные гистограммы из БД
+        {
+            string query = @"SELECT * FROM Gist_info WHERE ID_photo ='" + listBox1.SelectedItem.ToString().Substring(1) + "'";
+            dbCommand = new OleDbCommand(query, connection);
+            OleDbDataReader reader = dbCommand.ExecuteReader();
+
+            if (!reader.HasRows)
+            {
+                MessageBox.Show("В БД нет информации о гистограммах к этому изображению", "Ошибка");
+                return;
+            }            
+
+            while (reader.Read())
+            {
+                analyse.avR = Array.ConvertAll((reader["gistR"]).ToString().Split(':'), double.Parse);
+                analyse.avG = Array.ConvertAll((reader["gistG"]).ToString().Split(':'), double.Parse);
+                analyse.avB = Array.ConvertAll((reader["gistB"]).ToString().Split(':'), double.Parse);
+
+                string[] avRGB = (reader["avBright"]).ToString().Split(':');
+                avR.Text = "Среднее R: " + avRGB[0];
+                avG.Text = "Среднее G: " + avRGB[1];
+                avB.Text = "Среднее B: " + avRGB[2];
+            }
+            reader.Close();
+
+            analyse.setRGB(chart1, chart2, chart3, chart4);
         }
 
         private void фотоToolStripMenuItem_Click(object sender, EventArgs e) //Загрузить новые экземпляры в бд

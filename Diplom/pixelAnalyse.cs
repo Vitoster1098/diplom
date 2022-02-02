@@ -17,6 +17,7 @@ namespace Diplom
         public Info[] data = new Info[1];
 
         ProgressBar bar = null;
+        Label Rval = null, Gval = null, Bval = null;
 
         public struct Info //Хранение данных о месте на битмап и его цвета
         {
@@ -46,9 +47,12 @@ namespace Diplom
             }
         }
 
-        public pixelAnalyse(ProgressBar bar)
+        public pixelAnalyse(ProgressBar bar, Label Rval, Label Gval, Label Bval)
         {
             this.bar = bar;
+            this.Rval = Rval;
+            this.Gval = Gval;
+            this.Bval = Bval;
         }
 
         public Bitmap getBitmap()
@@ -173,6 +177,9 @@ namespace Diplom
             r.Series[0].Points.Clear();
             g.Series[0].Points.Clear();
             b.Series[0].Points.Clear();
+            rgb.Series[0].Points.Clear();
+            rgb.Series[1].Points.Clear();
+            rgb.Series[2].Points.Clear();
 
             for (int i = 0; i < avR.Length - 1; ++i)
             {
@@ -182,7 +189,45 @@ namespace Diplom
                 rgb.Series[0].Points.AddXY(i, avR[i] / data.Length);
                 rgb.Series[1].Points.AddXY(i, avG[i] / data.Length);
                 rgb.Series[2].Points.AddXY(i, avB[i] / data.Length);
-            }            
+            }
+
+            Rval.Text = "Среднее R: " + Math.Round(getAverageGistogramm("R"), 3);
+            Gval.Text = "Среднее G: " + Math.Round(getAverageGistogramm("G"), 3);
+            Bval.Text = "Среднее B: " + Math.Round(getAverageGistogramm("B"), 3);
+        }
+
+        public double getAverageGistogramm(string type) //Получение среднего значения гистограммы по R G B
+        {
+            double av = 0;
+
+            switch (type)
+            {
+                case "R":
+                    {
+                        for(int i = 0; i < avR.Length - 1; ++i)
+                        {
+                            av += avR[i];
+                        }
+                        break;
+                    }
+                case "G":
+                    {
+                        for (int i = 0; i < avG.Length - 1; ++i)
+                        {
+                            av += avG[i];
+                        }
+                        break;
+                    }
+                case "B":
+                    {
+                        for (int i = 0; i < avB.Length - 1; ++i)
+                        {
+                            av += avB[i];
+                        }
+                        break;
+                    }
+            }
+            return av / 255;
         }
 
         public Color newBrightness(Color point, double q) //расчет новой яркости
