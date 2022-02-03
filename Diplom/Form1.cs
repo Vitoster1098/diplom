@@ -210,7 +210,7 @@ namespace Diplom
                 dbCommand = new OleDbCommand(query, connection);
                 OleDbDataReader reader = dbCommand.ExecuteReader();
 
-                analyse = new pixelAnalyse(progressBar1, avR, avG, avB); //очистка
+                analyse = new pixelAnalyse(progressBar1); //очистка
 
                 while (reader.Read())
                 {
@@ -282,12 +282,15 @@ namespace Diplom
 
             analyse.setRGB(chart1, chart2, chart3, chart4);
             avgBrightness = analyse.getAverageBrightness();
-            avgLabel.Text = "Средняя яркость: " + Math.Round(avgBrightness, 2);
+            avgLabel.Text = "Средняя яркость: " + Math.Round(avgBrightness, 3);
+            avR.Text = "Среднее R: " + Math.Round(analyse.getAverageGistogramm("R"), 3);
+            avG.Text = "Среднее G: " + Math.Round(analyse.getAverageGistogramm("G"), 3);
+            avB.Text = "Среднее B: " + Math.Round(analyse.getAverageGistogramm("B"), 3);
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            analyse = new pixelAnalyse(progressBar1, avR, avG, avB);
+            analyse = new pixelAnalyse(progressBar1);
 
             chart1.ChartAreas[0].CursorX.IsUserEnabled = true;
             chart1.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;

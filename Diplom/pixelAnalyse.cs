@@ -17,7 +17,6 @@ namespace Diplom
         public Info[] data = new Info[1];
 
         ProgressBar bar = null;
-        Label Rval = null, Gval = null, Bval = null;
 
         public struct Info //Хранение данных о месте на битмап и его цвета
         {
@@ -47,12 +46,9 @@ namespace Diplom
             }
         }
 
-        public pixelAnalyse(ProgressBar bar, Label Rval, Label Gval, Label Bval)
+        public pixelAnalyse(ProgressBar bar)
         {
             this.bar = bar;
-            this.Rval = Rval;
-            this.Gval = Gval;
-            this.Bval = Bval;
         }
 
         public Bitmap getBitmap()
@@ -190,10 +186,7 @@ namespace Diplom
                 rgb.Series[1].Points.AddXY(i, avG[i] / data.Length);
                 rgb.Series[2].Points.AddXY(i, avB[i] / data.Length);
             }
-
-            Rval.Text = "Среднее R: " + Math.Round(getAverageGistogramm("R"), 3);
-            Gval.Text = "Среднее G: " + Math.Round(getAverageGistogramm("G"), 3);
-            Bval.Text = "Среднее B: " + Math.Round(getAverageGistogramm("B"), 3);
+               //добавить обновление значений яркости
         }
 
         public double getAverageGistogramm(string type) //Получение среднего значения гистограммы по R G B
