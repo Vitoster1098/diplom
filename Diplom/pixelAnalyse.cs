@@ -206,7 +206,7 @@ namespace Diplom
                     {
                         for(int i = 0; i < avR.Length - 1; ++i)
                         {
-                            av += avR[i];
+                            av += (avR[i] / 255) * i;
                         }
                         break;
                     }
@@ -214,7 +214,7 @@ namespace Diplom
                     {
                         for (int i = 0; i < avG.Length - 1; ++i)
                         {
-                            av += avG[i];
+                            av += (avG[i] / 255) * i;
                         }
                         break;
                     }
@@ -222,7 +222,7 @@ namespace Diplom
                     {
                         for (int i = 0; i < avB.Length - 1; ++i)
                         {
-                            av += avB[i];
+                            av += (avB[i] / 255) * i;
                         }
                         break;
                     }
