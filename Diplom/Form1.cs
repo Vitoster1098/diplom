@@ -64,7 +64,7 @@ namespace Diplom
             avgLabel.Text = "Средняя яркость:";
         }
 
-        public void ScanFile(string path, string diagnose="Меланома")
+        public void ScanFile(string path, string diagnose)
         {
             Bitmap image;
             try
@@ -139,7 +139,9 @@ namespace Diplom
         }
 
         private void fillListbox() //Формирует список имен файлов с бд
-        {
+        {            
+            fillFilter();
+            comboBox1.SelectedIndex = 0;
             exsamplesPath = GetPath();
         }
 
@@ -151,6 +153,11 @@ namespace Diplom
             OleDbDataReader reader = command.ExecuteReader();
             reader.Read();
             var rowCount = (int)reader["RowCount"];
+
+            if(comboBox1.Text != "Все")
+            {
+                query += " WHERE Diagnose ='" + comboBox1.Text + "'";
+            }
 
             command = new OleDbCommand(query, connection);
             reader = command.ExecuteReader();
@@ -251,6 +258,21 @@ namespace Diplom
             }            
         }
 
+        private void fillFilter()
+        {
+            string query = "SELECT DISTINCT Diagnose FROM Exsamples";
+            dbCommand = new OleDbCommand(query, connection);
+            OleDbDataReader reader = dbCommand.ExecuteReader();
+
+            comboBox1.Items.Add("Все");
+
+            while (reader.Read())
+            {
+                comboBox1.Items.Add(reader["Diagnose"]);
+            }
+            reader.Close();
+        }
+
         private void базуДанныхToolStripMenuItem_Click(object sender, EventArgs e) //Открытие базы данных
         {
             OpenFileDialog fileDialog = new OpenFileDialog();
@@ -310,7 +332,7 @@ namespace Diplom
             chart4.ChartAreas[0].CursorX.IsUserEnabled = true;
             chart4.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
             chart4.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
-            chart4.ChartAreas[0].AxisX.ScrollBar.IsPositionedInside = true;
+            chart4.ChartAreas[0].AxisX.ScrollBar.IsPositionedInside = true;            
         }
 
         private void очиститьПоляToolStripMenuItem_Click(object sender, EventArgs e)
@@ -380,6 +402,12 @@ namespace Diplom
             analyse.setRGB(chart1, chart2, chart3, chart4);
         }
 
+        private void FilterButton_Click(object sender, EventArgs e) //Применить параметры фильтрации
+        {
+            if (connectionString == "") { return; }
+            fillListbox();
+        }
+
         private void фотоToolStripMenuItem_Click(object sender, EventArgs e) //Загрузить новые экземпляры в бд
         {
             if(connectionString == "")
@@ -411,7 +439,7 @@ namespace Diplom
                 //MessageBox.Show(filename);
                 if (!checkPath(Path.Combine(dn, Path.GetFileName(filename)))) //Если нет записи о изображении - добавляем, иначе скип
                 {
-                    ScanFile(Path.Combine(dn, Path.GetFileName(filename))); //Вызов функции обработки изображений в папке                    
+                    ScanFile(Path.Combine(dn, Path.GetFileName(filename)), dn); //Вызов функции обработки изображений в папке                    
                     progressBar1.Value++;
                 }
             }

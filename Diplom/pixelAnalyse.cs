@@ -186,7 +186,6 @@ namespace Diplom
                 rgb.Series[1].Points.AddXY(i, avG[i] / data.Length);
                 rgb.Series[2].Points.AddXY(i, avB[i] / data.Length);
             }
-               //добавить обновление значений яркости
         }
 
         public double getAverageGistogramm(string type) //Получение среднего значения гистограммы по R G B
