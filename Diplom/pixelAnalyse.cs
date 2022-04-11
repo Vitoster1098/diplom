@@ -153,7 +153,7 @@ namespace Diplom
 
         public void changeBrightness() //изменение яркости с сохранением в структуру
         {
-            avgBrightness = getAverageBrightness();
+            avgBrightness = getAvgBrightness();
             clearAvg();
 
             bar.Maximum = data.Count();

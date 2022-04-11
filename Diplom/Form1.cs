@@ -76,7 +76,7 @@ namespace Diplom
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message, "Ошибка при представлении изображения");
+                MessageBox.Show(ex.Message + "\r\nВозможно неподдерживаемое разрешение: " + Path.GetExtension(path), "Ошибка при представлении изображения");
                 return;
             }
 
@@ -316,7 +316,7 @@ namespace Diplom
             pictureBox2.Image = selBitmap;
 
             analyse.setRGB(chart1, chart2, chart3, chart4);
-            avgBrightness = analyse.getAverageBrightness();
+            avgBrightness = analyse.getAvgBrightness();
             avgLabel.Text = "Средняя яркость: " + Math.Round(avgBrightness, 3);
             avR.Text = "Среднее R: " + Math.Round(analyse.getAverageGistogramm("R"), 3);
             avG.Text = "Среднее G: " + Math.Round(analyse.getAverageGistogramm("G"), 3);
@@ -355,18 +355,21 @@ namespace Diplom
 
         private void сохранитьГистограммToolStripMenuItem_Click(object sender, EventArgs e) //Сохранить данные гистограммы в БД
         {
-            if(analyse.data.Length == 1) { return; }           
-            string ID_photo = listBox1.SelectedItem.ToString().Substring(1);
+            if(analyse.data.Length == 1) { return; }
+            string ID_photo = listBox1.SelectedItem.ToString();//.Substring(1);
+            //MessageBox.Show(ID_photo);
 
-            string query = "SELECT COUNT(*) FROM Gist_info WHERE ID_photo='" + ID_photo + "'";
+            string query = "SELECT COUNT(*) AS num FROM Gist_info WHERE ID_photo='" + ID_photo + "'";
             dbCommand = new OleDbCommand(query, connection);
             OleDbDataReader reader = dbCommand.ExecuteReader();
-
-            if (reader.HasRows)
+            reader.Read();
+            if ((int)reader["num"] != 0)
             {
                 MessageBox.Show("В БД уже есть информация о гистограммах к этому изображению", "Ошибка");
+                reader.Close();
                 return;
             }
+            reader.Close();
 
             string R = (analyse.avR[0]).ToString(), 
                 G = (analyse.avG[0]).ToString(), 
@@ -381,15 +384,15 @@ namespace Diplom
             string avBright = "";
             avBright = avR.Text.Substring(10) + ":" + avG.Text.Substring(10) + ":" + avB.Text.Substring(10);
 
-            query = "INSERT INTO Gist_info (ID_photo, gistR, gistG, gistB, avBright) "
-               + "VALUES ('" + ID_photo + "', '" + R + "', '" + G + "', '" + B + "', '" + avBright + "')";
+            query = "INSERT INTO Gist_info (ID_photo, gistR, gistG, gistB, avBright, AllBright) "
+               + "VALUES ('" + ID_photo + "', '" + R + "', '" + G + "', '" + B + "', '" + avBright + "', '" + analyse.getAvgBrightness() + "')";
             dbCommand = new OleDbCommand(query, connection);
             dbCommand.ExecuteNonQuery();
         }
 
         private void загрузитьToolStripMenuItem_Click(object sender, EventArgs e) //Загрузить данные гистограммы из БД
         {
-            string query = @"SELECT * FROM Gist_info WHERE ID_photo ='" + listBox1.SelectedItem.ToString().Substring(1) + "'";
+            string query = @"SELECT * FROM Gist_info WHERE ID_photo ='" + listBox1.SelectedItem.ToString() + "'";
             dbCommand = new OleDbCommand(query, connection);
             OleDbDataReader reader = dbCommand.ExecuteReader();
 
@@ -401,6 +404,21 @@ namespace Diplom
 
             while (reader.Read())
             {
+                analyse.setAvgBrightness(Convert.ToDouble(reader["AllBright"].ToString()));                
+
+                try
+                {
+                    analyse.changeBrightness();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Ошибка задания новой яркости");
+                    return;
+                }
+
+                selBitmap = new Bitmap(analyse.getBitmapByInfo(new Bitmap(selBitmap.Width, selBitmap.Height))); //получение битмапа на основе данных из бд
+                pictureBox2.Image = selBitmap;
+
                 analyse.avR = Array.ConvertAll((reader["gistR"]).ToString().Split(':'), double.Parse);
                 analyse.avG = Array.ConvertAll((reader["gistG"]).ToString().Split(':'), double.Parse);
                 analyse.avB = Array.ConvertAll((reader["gistB"]).ToString().Split(':'), double.Parse);
@@ -409,6 +427,7 @@ namespace Diplom
                 avR.Text = "Среднее R: " + avRGB[0];
                 avG.Text = "Среднее G: " + avRGB[1];
                 avB.Text = "Среднее B: " + avRGB[2];
+                avgLabel.Text = analyse.getAvgBrightness().ToString();
             }
             reader.Close();
 
@@ -440,22 +459,6 @@ namespace Diplom
                     path = dialog.SelectedPath;
                 }
             }
-
-            /*string[] allfiles = Directory.GetFiles(path);
-            progressBar1.Maximum = allfiles.Length;
-            progressBar1.Value = 0;
-
-            foreach (string filename in allfiles)
-            {
-                var dn = Path.GetDirectoryName(filename);
-                dn = dn.Substring(dn.LastIndexOf('\\') + 1);
-                //MessageBox.Show(filename);
-                if (!checkPath(Path.Combine(dn, Path.GetFileName(filename)))) //Если нет записи о изображении - добавляем, иначе скип
-                {
-                    ScanFile(Path.Combine(dn, Path.GetFileName(filename)), dn); //Вызов функции обработки изображений в папке                    
-                    progressBar1.Value++;
-                }
-            }*/
 
             List<string> ls = GetRecursFiles(path);
             progressBar1.Value = 0;
