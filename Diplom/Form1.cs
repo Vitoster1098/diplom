@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Data.OleDb;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Diplom
 {
@@ -42,6 +43,7 @@ namespace Diplom
                 connectionString = newconnectionString;
                 status.BackColor = Color.Green;
                 conStatusLbl.Text = "Соединено с:" + connectionString;
+                fillFilter();
             }
             catch (Exception ex)
             {
@@ -58,10 +60,11 @@ namespace Diplom
             chart2.Series[0].Points.Clear();
             chart3.Series[0].Points.Clear();
 
-            pictureBox2.Image.Dispose();
+            //pictureBox2.Image.Dispose();
             pictureBox2.Image = null;
             progressBar1.Value = 0;
             avgLabel.Text = "Средняя яркость:";
+            comboBox1.Items.Clear();
         }
 
         public void ScanFile(string path, string diagnose)
@@ -73,11 +76,15 @@ namespace Diplom
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Ошибка при представлении изображения");
                 return;
             }
 
-            string query = "INSERT INTO Exsamples (Path, Diagnose) VALUES ('" + path + "', '" + diagnose + "')";
+            var dn = Path.GetDirectoryName(path);
+            dn = dn.Substring(dn.LastIndexOf('\\') + 1); //Имя последней папки
+
+
+            string query = "INSERT INTO Exsamples (Path, Diagnose) VALUES ('" + Path.Combine(dn, Path.GetFileName(path)) + "', '" + diagnose + "')";
             dbCommand = new OleDbCommand(query, connection);
             dbCommand.ExecuteNonQuery();
 
@@ -88,7 +95,7 @@ namespace Diplom
                     if (image.GetPixel(i, j).R == 255 && image.GetPixel(i, j).G == 255 && image.GetPixel(i, j).B == 255)
                         continue;
                     else
-                        addData(image.GetPixel(i, j).R, image.GetPixel(i, j).G, image.GetPixel(i, j).B, path, diagnose, i, j);
+                        addData(image.GetPixel(i, j).R, image.GetPixel(i, j).G, image.GetPixel(i, j).B, Path.Combine(dn, Path.GetFileName(path)), diagnose, i, j);
                 }
             }
         }
@@ -140,9 +147,7 @@ namespace Diplom
 
         private void fillListbox() //Формирует список имен файлов с бд
         {            
-            fillFilter();
-            comboBox1.SelectedIndex = 0;
-            exsamplesPath = GetPath();
+            exsamplesPath = GetPath();            
         }
 
         public string[] GetPath() //Заполняет листбокс именами экземпляров из бд и возвращает список имён файлов
@@ -154,6 +159,11 @@ namespace Diplom
             reader.Read();
             var rowCount = (int)reader["RowCount"];
 
+            if(comboBox1.Items.Count == 0)
+            {
+                comboBox1.Items.Add("Все");
+                comboBox1.SelectedIndex = 0;
+            }
             if(comboBox1.Text != "Все")
             {
                 query += " WHERE Diagnose ='" + comboBox1.Text + "'";
@@ -197,6 +207,8 @@ namespace Diplom
                 dbCommand.CommandText = "DELETE FROM Spot_info";
                 dbCommand.ExecuteNonQuery();
                 dbCommand.CommandText = "DELETE FROM Exsamples";
+                dbCommand.ExecuteNonQuery();
+                dbCommand.CommandText = "DELETE FROM Gist_info";
                 dbCommand.ExecuteNonQuery();
             }
             catch(Exception ex)
@@ -265,6 +277,7 @@ namespace Diplom
             OleDbDataReader reader = dbCommand.ExecuteReader();
 
             comboBox1.Items.Add("Все");
+            comboBox1.SelectedIndex = 0;
 
             while (reader.Read())
             {
@@ -428,7 +441,7 @@ namespace Diplom
                 }
             }
 
-            string[] allfiles = Directory.GetFiles(path);
+            /*string[] allfiles = Directory.GetFiles(path);
             progressBar1.Maximum = allfiles.Length;
             progressBar1.Value = 0;
 
@@ -442,8 +455,52 @@ namespace Diplom
                     ScanFile(Path.Combine(dn, Path.GetFileName(filename)), dn); //Вызов функции обработки изображений в папке                    
                     progressBar1.Value++;
                 }
+            }*/
+
+            List<string> ls = GetRecursFiles(path);
+            progressBar1.Value = 0;
+            progressBar1.Maximum = ls.Count;
+
+            foreach (string fname in ls)
+            {
+                if(fname.IndexOf('.') > 0) //Проверка является ли строка файлом
+                {
+                    var dn = Path.GetDirectoryName(fname);
+                    dn = dn.Substring(dn.LastIndexOf('\\') + 1); //Имя последней папки
+                    /*MessageBox.Show("Полный путь: " + fname + "\r\nИмя папки: "+ dn + "\r\nИмя файла: " + Path.GetFileName(fname)
+                        + "\r\nВместе: " + Path.Combine(dn, Path.GetFileName(fname)), dn);*/
+                    if (!checkPath(Path.Combine(dn, Path.GetFileName(fname)))) //Если нет записи о изображении - добавляем, иначе скип
+                    {
+                        ScanFile(fname, dn); //Вызов функции обработки изображений в папке                    
+                    }
+                }                
+                progressBar1.Value++;
             }
             fillListbox();
+        }        
+
+        private List<string> GetRecursFiles(string start_path)
+        {
+            List<string> ls = new List<string>();
+            try
+            {
+                string[] folders = Directory.GetDirectories(start_path);
+                foreach (string folder in folders)
+                {
+                    ls.Add(folder);
+                    ls.AddRange(GetRecursFiles(folder));
+                }
+                string[] files = Directory.GetFiles(start_path);
+                foreach (string filename in files)
+                {
+                    ls.Add(filename);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+            return ls;
         }
     }
 }
