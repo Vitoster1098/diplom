@@ -77,6 +77,7 @@ namespace Diplom
         public void setInfo(Point pos, Color color) //установка значений в структуру
         {
             data[data.Length-1] = new Info(new Point(pos.X, pos.Y), color);
+            setAvgColor(color);
             Array.Resize(ref data, data.Length + 1);
         }
         public int getMax(bool XorY) //Если передаём True - ищет по X, иначе по Y - возвращает максимальное значения
@@ -151,20 +152,58 @@ namespace Diplom
             return sum / data.Length;
         }
 
-        public void changeBrightness() //изменение яркости с сохранением в структуру
+        public void changeBrightness(string typeProc) //изменение яркости с сохранением в структуру
         {
-            avgBrightness = getAvgBrightness();
-            clearAvg();
+            avgBrightness = getAvgBrightness();            
 
             bar.Maximum = data.Count();
-            bar.Value = 1;
+            bar.Value = 0;
 
-            for (int i = 0; i < data.Length - 1; i++)
+            if (typeProc == "avgBright")
             {
-                Color newclr = newBrightness(data[i].getColor(), avgBrightness);
-                setAvgColor(newclr);
-                data[i].setColor(newclr);
-                bar.Value++;
+                clearAvg();
+                for (int i = 0; i < data.Length - 1; i++)
+                {
+                    Color newclr = newBrightness(data[i].getColor(), avgBrightness, true);
+                    setAvgColor(newclr);
+                    data[i].setColor(newclr);
+                    bar.Value++;
+                }
+            }
+            if (typeProc == "avgDefl")
+            {
+                double y = 0, sum = 0, D = 0, Sg = 0;
+                double[] w = new double[256];
+
+                for(int i = 0; i < avR.Length-1; ++i)
+                {
+                    sum += avR[i];
+                }
+                for (int i = 0; i < w.Length - 1; ++i)
+                {
+                    w[i] = avR[i] / sum; //Частота
+                    y += w[i] * i;
+                }
+                MessageBox.Show("Сумма:" + sum + "\r\nСреднее:"+y);
+                for (int i = 0; i < w.Length - 1; ++i)
+                {
+                    D += (Math.Pow(i, 2) * w[i]) - Math.Pow(y, 2);
+                }
+                Sg = Math.Sqrt(Math.Abs(D));
+                MessageBox.Show("Дисперсия:" + D + "\r\nОтклонение:"+Sg);
+                clearAvg();
+
+                for (int i = 0; i < data.Length - 1; i++)
+                {
+                    Color newclr = newBrightness(data[i].getColor(), Sg, false);
+                    setAvgColor(newclr);
+                    data[i].setColor(newclr);
+                    bar.Value++;
+                }
+            }
+            if (typeProc == "median")
+            {
+
             }
         }
 
@@ -222,12 +261,18 @@ namespace Diplom
             return av / 255;
         }
 
-        public Color newBrightness(Color point, double q) //расчет новой яркости
+        public Color newBrightness(Color point, double q, bool isAvgBright) //расчет новой яркости
         {
             byte R = 0, G = 0, B = 0;
             int[] mx = { point.R, point.G, point.B };
-            int max = mx.Max();           
-            double q_new = 127.5 / q;
+            int max = mx.Max();
+            double q_new = q;
+
+            if (isAvgBright)
+            {
+                q_new = 127.5 / q;
+            }
+            
             double q1 = q_new;
             double max1 = max * q1;
 

@@ -29,20 +29,20 @@ namespace Diplom
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea9 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend9 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series13 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea10 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend10 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series14 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea11 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend11 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series15 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea12 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend12 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series16 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series17 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series18 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea7 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend7 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea8 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend8 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series11 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series12 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.connect = new System.Windows.Forms.Button();
             this.disconnect = new System.Windows.Forms.Button();
             this.connect_status = new System.Windows.Forms.PictureBox();
@@ -73,9 +73,14 @@ namespace Diplom
             this.avG = new System.Windows.Forms.Label();
             this.avB = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.FilterButton = new System.Windows.Forms.Button();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton3 = new System.Windows.Forms.RadioButton();
+            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.connect_status)).BeginInit();
             this.panel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -85,6 +90,7 @@ namespace Diplom
             ((System.ComponentModel.ISupportInitialize)(this.chart3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart4)).BeginInit();
             this.panel2.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // connect
@@ -128,7 +134,7 @@ namespace Diplom
             this.panel1.Controls.Add(this.connect_status);
             this.panel1.Controls.Add(this.disconnect);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 691);
+            this.panel1.Location = new System.Drawing.Point(0, 783);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1068, 32);
             this.panel1.TabIndex = 3;
@@ -227,7 +233,7 @@ namespace Diplom
             // 
             this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar1.Location = new System.Drawing.Point(0, 676);
+            this.progressBar1.Location = new System.Drawing.Point(0, 768);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(1068, 15);
             this.progressBar1.TabIndex = 5;
@@ -264,7 +270,7 @@ namespace Diplom
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(183, 33);
+            this.label3.Location = new System.Drawing.Point(256, 33);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(114, 13);
             this.label3.TabIndex = 11;
@@ -272,9 +278,9 @@ namespace Diplom
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(259, 387);
+            this.button1.Location = new System.Drawing.Point(320, 76);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(87, 31);
             this.button1.TabIndex = 12;
             this.button1.Text = "Обработать";
             this.button1.UseVisualStyleBackColor = true;
@@ -282,19 +288,19 @@ namespace Diplom
             // 
             // chart1
             // 
-            chartArea9.AxisX.Maximum = 255D;
-            chartArea9.AxisX.Minimum = 0D;
-            chartArea9.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea9);
-            legend9.Name = "Legend1";
-            this.chart1.Legends.Add(legend9);
+            chartArea5.AxisX.Maximum = 255D;
+            chartArea5.AxisX.Minimum = 0D;
+            chartArea5.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea5);
+            legend5.Name = "Legend1";
+            this.chart1.Legends.Add(legend5);
             this.chart1.Location = new System.Drawing.Point(675, 61);
             this.chart1.Name = "chart1";
-            series13.ChartArea = "ChartArea1";
-            series13.Color = System.Drawing.Color.Red;
-            series13.Legend = "Legend1";
-            series13.Name = "R";
-            this.chart1.Series.Add(series13);
+            series7.ChartArea = "ChartArea1";
+            series7.Color = System.Drawing.Color.Red;
+            series7.Legend = "Legend1";
+            series7.Name = "R";
+            this.chart1.Series.Add(series7);
             this.chart1.Size = new System.Drawing.Size(381, 195);
             this.chart1.TabIndex = 13;
             this.chart1.Text = "chart1";
@@ -302,7 +308,7 @@ namespace Diplom
             // avgLabel
             // 
             this.avgLabel.AutoSize = true;
-            this.avgLabel.Location = new System.Drawing.Point(340, 392);
+            this.avgLabel.Location = new System.Drawing.Point(261, 516);
             this.avgLabel.Name = "avgLabel";
             this.avgLabel.Size = new System.Drawing.Size(97, 13);
             this.avgLabel.TabIndex = 14;
@@ -310,70 +316,70 @@ namespace Diplom
             // 
             // chart2
             // 
-            chartArea10.AxisX.Maximum = 255D;
-            chartArea10.AxisX.Minimum = 0D;
-            chartArea10.Name = "ChartArea1";
-            this.chart2.ChartAreas.Add(chartArea10);
-            legend10.Name = "Legend1";
-            this.chart2.Legends.Add(legend10);
+            chartArea6.AxisX.Maximum = 255D;
+            chartArea6.AxisX.Minimum = 0D;
+            chartArea6.Name = "ChartArea1";
+            this.chart2.ChartAreas.Add(chartArea6);
+            legend6.Name = "Legend1";
+            this.chart2.Legends.Add(legend6);
             this.chart2.Location = new System.Drawing.Point(675, 262);
             this.chart2.Name = "chart2";
-            series14.ChartArea = "ChartArea1";
-            series14.Color = System.Drawing.Color.Lime;
-            series14.Legend = "Legend1";
-            series14.Name = "G";
-            this.chart2.Series.Add(series14);
+            series8.ChartArea = "ChartArea1";
+            series8.Color = System.Drawing.Color.Lime;
+            series8.Legend = "Legend1";
+            series8.Name = "G";
+            this.chart2.Series.Add(series8);
             this.chart2.Size = new System.Drawing.Size(381, 195);
             this.chart2.TabIndex = 15;
             this.chart2.Text = "chart2";
             // 
             // chart3
             // 
-            chartArea11.AxisX.Maximum = 255D;
-            chartArea11.AxisX.Minimum = 0D;
-            chartArea11.Name = "ChartArea1";
-            this.chart3.ChartAreas.Add(chartArea11);
-            legend11.Name = "Legend1";
-            this.chart3.Legends.Add(legend11);
+            chartArea7.AxisX.Maximum = 255D;
+            chartArea7.AxisX.Minimum = 0D;
+            chartArea7.Name = "ChartArea1";
+            this.chart3.ChartAreas.Add(chartArea7);
+            legend7.Name = "Legend1";
+            this.chart3.Legends.Add(legend7);
             this.chart3.Location = new System.Drawing.Point(675, 463);
             this.chart3.Name = "chart3";
-            series15.ChartArea = "ChartArea1";
-            series15.Color = System.Drawing.Color.Blue;
-            series15.Legend = "Legend1";
-            series15.Name = "B";
-            this.chart3.Series.Add(series15);
+            series9.ChartArea = "ChartArea1";
+            series9.Color = System.Drawing.Color.Blue;
+            series9.Legend = "Legend1";
+            series9.Name = "B";
+            this.chart3.Series.Add(series9);
             this.chart3.Size = new System.Drawing.Size(381, 195);
             this.chart3.TabIndex = 16;
             this.chart3.Text = "chart3";
             // 
             // chart4
             // 
-            chartArea12.AxisX.Maximum = 255D;
-            chartArea12.AxisX.Minimum = 0D;
-            chartArea12.Name = "ChartArea1";
-            this.chart4.ChartAreas.Add(chartArea12);
-            legend12.Name = "Legend1";
-            this.chart4.Legends.Add(legend12);
-            this.chart4.Location = new System.Drawing.Point(259, 463);
+            chartArea8.AxisX.Maximum = 255D;
+            chartArea8.AxisX.Minimum = 0D;
+            chartArea8.Name = "ChartArea1";
+            this.chart4.ChartAreas.Add(chartArea8);
+            legend8.Name = "Legend1";
+            this.chart4.Legends.Add(legend8);
+            this.chart4.Location = new System.Drawing.Point(259, 567);
             this.chart4.Name = "chart4";
-            series16.ChartArea = "ChartArea1";
-            series16.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series16.Color = System.Drawing.Color.Red;
-            series16.Legend = "Legend1";
-            series16.Name = "R";
-            series17.ChartArea = "ChartArea1";
-            series17.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series17.Color = System.Drawing.Color.Lime;
-            series17.Legend = "Legend1";
-            series17.Name = "G";
-            series18.ChartArea = "ChartArea1";
-            series18.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series18.Color = System.Drawing.Color.Blue;
-            series18.Legend = "Legend1";
-            series18.Name = "B";
-            this.chart4.Series.Add(series16);
-            this.chart4.Series.Add(series17);
-            this.chart4.Series.Add(series18);
+            series10.ChartArea = "ChartArea1";
+            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series10.Color = System.Drawing.Color.Red;
+            series10.Legend = "Legend1";
+            series10.Name = "R";
+            series11.ChartArea = "ChartArea1";
+            series11.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series11.Color = System.Drawing.Color.Lime;
+            series11.Legend = "Legend1";
+            series11.Name = "G";
+            series12.ChartArea = "ChartArea1";
+            series12.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series12.Color = System.Drawing.Color.Blue;
+            series12.Legend = "Legend1";
+            series12.Name = "B";
+            this.chart4.Series.Add(series10);
+            this.chart4.Series.Add(series11);
+            this.chart4.Series.Add(series12);
             this.chart4.Size = new System.Drawing.Size(410, 195);
             this.chart4.TabIndex = 17;
             this.chart4.Text = "chart4";
@@ -381,7 +387,7 @@ namespace Diplom
             // avR
             // 
             this.avR.AutoSize = true;
-            this.avR.Location = new System.Drawing.Point(259, 426);
+            this.avR.Location = new System.Drawing.Point(261, 539);
             this.avR.Name = "avR";
             this.avR.Size = new System.Drawing.Size(64, 13);
             this.avR.TabIndex = 18;
@@ -390,7 +396,7 @@ namespace Diplom
             // avG
             // 
             this.avG.AutoSize = true;
-            this.avG.Location = new System.Drawing.Point(373, 426);
+            this.avG.Location = new System.Drawing.Point(375, 539);
             this.avG.Name = "avG";
             this.avG.Size = new System.Drawing.Size(64, 13);
             this.avG.TabIndex = 19;
@@ -399,7 +405,7 @@ namespace Diplom
             // avB
             // 
             this.avB.AutoSize = true;
-            this.avB.Location = new System.Drawing.Point(495, 426);
+            this.avB.Location = new System.Drawing.Point(497, 539);
             this.avB.Name = "avB";
             this.avB.Size = new System.Drawing.Size(63, 13);
             this.avB.TabIndex = 20;
@@ -416,23 +422,6 @@ namespace Diplom
             this.panel2.Size = new System.Drawing.Size(243, 105);
             this.panel2.TabIndex = 21;
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(2, 9);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(74, 13);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Фильтрация:";
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(5, 35);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(235, 21);
-            this.comboBox1.TabIndex = 1;
-            // 
             // FilterButton
             // 
             this.FilterButton.Location = new System.Drawing.Point(156, 62);
@@ -443,11 +432,82 @@ namespace Diplom
             this.FilterButton.UseVisualStyleBackColor = true;
             this.FilterButton.Click += new System.EventHandler(this.FilterButton_Click);
             // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(5, 35);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(235, 21);
+            this.comboBox1.TabIndex = 1;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(2, 9);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(74, 13);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Фильтрация:";
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.radioButton3);
+            this.panel3.Controls.Add(this.radioButton2);
+            this.panel3.Controls.Add(this.radioButton1);
+            this.panel3.Controls.Add(this.button1);
+            this.panel3.Location = new System.Drawing.Point(259, 387);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(410, 110);
+            this.panel3.TabIndex = 22;
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Checked = true;
+            this.radioButton1.Location = new System.Drawing.Point(5, 13);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(112, 17);
+            this.radioButton1.TabIndex = 13;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "Средняя яркость";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(5, 36);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(194, 17);
+            this.radioButton2.TabIndex = 14;
+            this.radioButton2.Text = "Среднеквадратичное отклонение";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            // 
+            // radioButton3
+            // 
+            this.radioButton3.AutoSize = true;
+            this.radioButton3.Location = new System.Drawing.Point(5, 59);
+            this.radioButton3.Name = "radioButton3";
+            this.radioButton3.Size = new System.Drawing.Size(82, 17);
+            this.radioButton3.TabIndex = 15;
+            this.radioButton3.Text = "Медианное";
+            this.radioButton3.UseVisualStyleBackColor = true;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(672, 33);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(80, 13);
+            this.label4.TabIndex = 23;
+            this.label4.Text = "Гистограммы:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1068, 723);
+            this.ClientSize = new System.Drawing.Size(1068, 815);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.avB);
             this.Controls.Add(this.avG);
@@ -457,7 +517,6 @@ namespace Diplom
             this.Controls.Add(this.chart2);
             this.Controls.Add(this.avgLabel);
             this.Controls.Add(this.chart1);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.listBox1);
@@ -483,6 +542,8 @@ namespace Diplom
             ((System.ComponentModel.ISupportInitialize)(this.chart4)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -523,6 +584,11 @@ namespace Diplom
         private System.Windows.Forms.Button FilterButton;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.RadioButton radioButton3;
+        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.Label label4;
     }
 }
 

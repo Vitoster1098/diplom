@@ -230,6 +230,7 @@ namespace Diplom
                 OleDbDataReader reader = dbCommand.ExecuteReader();
 
                 analyse = new pixelAnalyse(progressBar1); //очистка
+                analyse.clearAvg();
 
                 while (reader.Read())
                 {
@@ -262,6 +263,7 @@ namespace Diplom
                 chart4.Series[0].Points.Clear();
                 chart4.Series[1].Points.Clear();
                 chart4.Series[2].Points.Clear();
+                analyse.setRGB(chart1, chart2, chart3, chart4);
             }
             catch (Exception ex)
             {
@@ -304,7 +306,20 @@ namespace Diplom
 
             try
             {
-                analyse.changeBrightness();
+                string typeProc = "none";
+                if (radioButton1.Checked)
+                {
+                    typeProc = "avgBright";
+                }
+                if (radioButton2.Checked)
+                {
+                    typeProc = "avgDefl";
+                }
+                if (radioButton3.Checked)
+                {
+                    typeProc = "median";
+                }
+                analyse.changeBrightness(typeProc);
             }
             catch(Exception ex)
             {
@@ -408,7 +423,20 @@ namespace Diplom
 
                 try
                 {
-                    analyse.changeBrightness();
+                    string typeProc = "none";
+                    if (radioButton1.Checked)
+                    {
+                        typeProc = "avgBright";
+                    }
+                    if (radioButton2.Checked)
+                    {
+                        typeProc = "avgDefl";
+                    }
+                    if (radioButton3.Checked)
+                    {
+                        typeProc = "median";
+                    }
+                    analyse.changeBrightness(typeProc);
                 }
                 catch (Exception ex)
                 {
