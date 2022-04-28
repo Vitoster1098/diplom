@@ -202,8 +202,43 @@ namespace Diplom
                 }
             }
             if (typeProc == "median")
-            {
+            {                
+                double m1 = 120;
+                double m = m1 - 0.5;
+                double sum = 0;
+                double[] w = new double[256];
 
+                for (int i = 0; i < avR.Length - 1; ++i)
+                {
+                    sum += avR[i]; //Подсчет общего кол-ва попаданий
+                }
+                for (int i = 0; i < w.Length - 1; ++i)
+                {
+                    w[i] = avR[i] / sum; //Частота
+                }
+                sum = 0;
+                int index = 0;
+                for (int i = 0; i < w.Length-1; ++i)
+                {
+                    if(sum < 0.5)
+                    {
+                        sum += w[i];
+                        index = i;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                //MessageBox.Show("Индекс середины:"+index);
+                clearAvg();
+                for (int i = 0; i < data.Length - 1; i++)
+                {
+                    Color newclr = newBrightness(data[i].getColor(), index, false);
+                    setAvgColor(newclr);
+                    data[i].setColor(newclr);
+                    bar.Value++;
+                }
             }
         }
 
