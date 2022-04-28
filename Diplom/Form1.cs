@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Data.OleDb;
@@ -230,7 +230,6 @@ namespace Diplom
                 OleDbDataReader reader = dbCommand.ExecuteReader();
 
                 analyse = new pixelAnalyse(progressBar1); //очистка
-                analyse.clearAvg();
 
                 while (reader.Read())
                 {
@@ -245,13 +244,26 @@ namespace Diplom
                 }
 
                 Bitmap fromBase = new Bitmap(analyse.getMax(true) + 1, analyse.getMax(false) + 1);
-                /*Graphics graphics = Graphics.FromImage(fromBase);
-                graphics.Clear(Color.White);*/
 
                 selBitmap = analyse.getBitmapByInfo(fromBase);
-                pictureBox2.Image = selBitmap;            
+                pictureBox2.Image = selBitmap;
 
+                analyse.wR = analyse.getAvgFrequency("R");
+                analyse.wG = analyse.getAvgFrequency("G");
+                analyse.wB = analyse.getAvgFrequency("B");
                 avgBrightness = analyse.getAverageBrightness();
+
+                analyse.calcMed();
+                analyse.calcDefl();
+
+                DeflRLabel.Text = "Ср.кв.откл R:" + Math.Round(analyse.getSg()[0], 3);
+                DeflGLabel.Text = "Ср.кв.откл G:" + Math.Round(analyse.getSg()[1], 3);
+                DeflBLabel.Text = "Ср.кв.откл B:" + Math.Round(analyse.getSg()[2], 3);
+
+                MedRLabel.Text = "Медиана R:" + Math.Round(analyse.getMed()[0], 3);
+                MedGLabel.Text = "Медиана G:" + Math.Round(analyse.getMed()[1], 3);
+                MedBLabel.Text = "Медиана B:" + Math.Round(analyse.getMed()[2], 3);
+
                 avgLabel.Text = "Средняя яркость: " + Math.Round(avgBrightness, 2);
                 avR.Text = "Среднее R: " + Math.Round(analyse.getAverageGistogramm("R"), 3);
                 avG.Text = "Среднее G: " + Math.Round(analyse.getAverageGistogramm("G"), 3);
@@ -306,20 +318,7 @@ namespace Diplom
 
             try
             {
-                string typeProc = "none";
-                if (radioButton1.Checked)
-                {
-                    typeProc = "avgBright";
-                }
-                if (radioButton2.Checked)
-                {
-                    typeProc = "avgDefl";
-                }
-                if (radioButton3.Checked)
-                {
-                    typeProc = "median";
-                }
-                analyse.changeBrightness(typeProc);
+                analyse.changeBrightness();
             }
             catch(Exception ex)
             {
@@ -329,6 +328,21 @@ namespace Diplom
 
             selBitmap = new Bitmap(analyse.getBitmapByInfo(new Bitmap(selBitmap.Width, selBitmap.Height))); //получение битмапа на основе данных из бд
             pictureBox2.Image = selBitmap;
+
+            analyse.wR = analyse.getAvgFrequency("R");
+            analyse.wG = analyse.getAvgFrequency("G");
+            analyse.wB = analyse.getAvgFrequency("B");
+
+            analyse.calcMed();
+            analyse.calcDefl();
+
+            DeflRLabel.Text = "Ср.кв.откл R:" + Math.Round(analyse.getSg()[0], 3);
+            DeflGLabel.Text = "Ср.кв.откл G:" + Math.Round(analyse.getSg()[1], 3);
+            DeflBLabel.Text = "Ср.кв.откл B:" + Math.Round(analyse.getSg()[2], 3);
+
+            MedRLabel.Text = "Медиана R:" + Math.Round(analyse.getMed()[0], 3);
+            MedGLabel.Text = "Медиана G:" + Math.Round(analyse.getMed()[1], 3);
+            MedBLabel.Text = "Медиана B:" + Math.Round(analyse.getMed()[2], 3);
 
             analyse.setRGB(chart1, chart2, chart3, chart4);
             avgBrightness = analyse.getAvgBrightness();
@@ -423,20 +437,7 @@ namespace Diplom
 
                 try
                 {
-                    string typeProc = "none";
-                    if (radioButton1.Checked)
-                    {
-                        typeProc = "avgBright";
-                    }
-                    if (radioButton2.Checked)
-                    {
-                        typeProc = "avgDefl";
-                    }
-                    if (radioButton3.Checked)
-                    {
-                        typeProc = "median";
-                    }
-                    analyse.changeBrightness(typeProc);
+                    analyse.changeBrightness();
                 }
                 catch (Exception ex)
                 {
