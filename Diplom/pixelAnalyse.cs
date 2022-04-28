@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -10,9 +10,15 @@ namespace Diplom
     {
         private Bitmap bitmap = new Bitmap(100, 100);
         private double avgBrightness = 0;
+        private double[] Sg = new double[3];
+        private double[] Med = new double[3];
         public double[] avR = new double[256];
         public double[] avG = new double[256];
         public double[] avB = new double[256];
+
+        public double[] wR = new double[256];
+        public double[] wG = new double[256];
+        public double[] wB = new double[256];
 
         public Info[] data = new Info[1];
 
@@ -127,6 +133,26 @@ namespace Diplom
             return avgBrightness;
         }
 
+        public void setSg(int index, double Sg)
+        {
+            this.Sg[index] = Sg;
+        }
+        
+        public double[] getSg()
+        {
+            return Sg;
+        }
+
+        public void setMed(int index, double Med)
+        {
+            this.Med[index] = Med;
+        }
+
+        public double[] getMed()
+        {
+            return Med;
+        }
+
         public void setAvgColor(Color avg) //заполнение данных гистограмм
         {
             avR[avg.R]++;
@@ -152,94 +178,120 @@ namespace Diplom
             return sum / data.Length;
         }
 
-        public void changeBrightness(string typeProc) //изменение яркости с сохранением в структуру
+        public void changeBrightness() //изменение яркости с сохранением в структуру
         {
-            avgBrightness = getAvgBrightness();            
-
+            avgBrightness = getAvgBrightness();           
             bar.Maximum = data.Count();
-            bar.Value = 0;
+            bar.Value = 0;             
+            clearAvg();
 
-            if (typeProc == "avgBright")
+            for (int i = 0; i < data.Length - 1; i++)
             {
-                clearAvg();
-                for (int i = 0; i < data.Length - 1; i++)
-                {
-                    Color newclr = newBrightness(data[i].getColor(), avgBrightness, true);
-                    setAvgColor(newclr);
-                    data[i].setColor(newclr);
-                    bar.Value++;
-                }
+                Color newclr = newBrightness(data[i].getColor(), avgBrightness);
+                setAvgColor(newclr);
+                data[i].setColor(newclr);
+                bar.Value++;
             }
-            if (typeProc == "avgDefl")
+        }
+
+        public void calcDefl()
+        {
+            double y = 0, D = 0;
+
+            for (int i = 0; i < 255; ++i)
             {
-                double y = 0, sum = 0, D = 0, Sg = 0;
-                double[] w = new double[256];
+                y += wR[i] * i;
+            }
+            //MessageBox.Show("Среднее:"+y);
+            for (int i = 0; i < 255; ++i)
+            {
+                D += (Math.Pow(i, 2) * wR[i]) - Math.Pow(y, 2);
+            }            
+            setSg(0, Math.Sqrt(Math.Abs(D)));
+            //MessageBox.Show("Дисперсия R:" + D + "\r\nОтклонение:" + Sg[0]);
 
-                for(int i = 0; i < avR.Length-1; ++i)
-                {
-                    sum += avR[i];
-                }
-                for (int i = 0; i < w.Length - 1; ++i)
-                {
-                    w[i] = avR[i] / sum; //Частота
-                    y += w[i] * i;
-                }
-                MessageBox.Show("Сумма:" + sum + "\r\nСреднее:"+y);
-                for (int i = 0; i < w.Length - 1; ++i)
-                {
-                    D += (Math.Pow(i, 2) * w[i]) - Math.Pow(y, 2);
-                }
-                Sg = Math.Sqrt(Math.Abs(D));
-                MessageBox.Show("Дисперсия:" + D + "\r\nОтклонение:"+Sg);
-                clearAvg();
+            y = 0;
+            D = 0;
+            for (int i = 0; i < 255; ++i)
+            {
+                y += wG[i] * i;
+            }
+            //MessageBox.Show("Среднее:"+y);
+            for (int i = 0; i < 255; ++i)
+            {
+                D += (Math.Pow(i, 2) * wG[i]) - Math.Pow(y, 2);
+            }
+            
+            setSg(1, Math.Sqrt(Math.Abs(D)));
+            //MessageBox.Show("Дисперсия G:" + D + "\r\nОтклонение:" + Sg[1]);
 
-                for (int i = 0; i < data.Length - 1; i++)
+            y = 0;
+            D = 0;
+            for (int i = 0; i < 255; ++i)
+            {
+                y += wB[i] * i;
+            }
+            //MessageBox.Show("Среднее:"+y);
+            for (int i = 0; i < 255; ++i)
+            {
+                D += (Math.Pow(i, 2) * wB[i]) - Math.Pow(y, 2);
+            }            
+            setSg(2, Math.Sqrt(Math.Abs(D)));
+            //MessageBox.Show("Дисперсия B:" + D + "\r\nОтклонение:" + Sg[2]);
+        }
+
+        public void calcMed()
+        {
+            double sum = 0;
+            double[] w = getAvgFrequency("R");
+            int index = 0;
+            for (int i = 0; i < 255; ++i)
+            {
+                if (sum < 0.5)
                 {
-                    Color newclr = newBrightness(data[i].getColor(), Sg, false);
-                    setAvgColor(newclr);
-                    data[i].setColor(newclr);
-                    bar.Value++;
+                    sum += w[i];
+                    index = i;
+                }
+                else
+                {
+                    break;
                 }
             }
-            if (typeProc == "median")
-            {                
-                double m1 = 120;
-                double m = m1 - 0.5;
-                double sum = 0;
-                double[] w = new double[256];
+            setMed(0,index - 0.5);
 
-                for (int i = 0; i < avR.Length - 1; ++i)
+            sum = 0;
+            w = getAvgFrequency("G");
+            index = 0;
+            for (int i = 0; i < 255; ++i)
+            {
+                if (sum < 0.5)
                 {
-                    sum += avR[i]; //Подсчет общего кол-ва попаданий
+                    sum += w[i];
+                    index = i;
                 }
-                for (int i = 0; i < w.Length - 1; ++i)
+                else
                 {
-                    w[i] = avR[i] / sum; //Частота
-                }
-                sum = 0;
-                int index = 0;
-                for (int i = 0; i < w.Length-1; ++i)
-                {
-                    if(sum < 0.5)
-                    {
-                        sum += w[i];
-                        index = i;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                //MessageBox.Show("Индекс середины:"+index);
-                clearAvg();
-                for (int i = 0; i < data.Length - 1; i++)
-                {
-                    Color newclr = newBrightness(data[i].getColor(), index, false);
-                    setAvgColor(newclr);
-                    data[i].setColor(newclr);
-                    bar.Value++;
+                    break;
                 }
             }
+            setMed(1, index - 0.5);
+
+            sum = 0;
+            w = getAvgFrequency("B");
+            index = 0;
+            for (int i = 0; i < 255; ++i)
+            {
+                if (sum < 0.5)
+                {
+                    sum += w[i];
+                    index = i;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            setMed(2, index - 0.5);
         }
 
         public void setRGB(Chart r, Chart g, Chart b, Chart rgb) //отрисовка гистограмм
@@ -296,17 +348,59 @@ namespace Diplom
             return av / 255;
         }
 
-        public Color newBrightness(Color point, double q, bool isAvgBright) //расчет новой яркости
+        public double[] getAvgFrequency(string type)
+        {
+            double sum = 0;
+            double[] freq = new double[256];
+            switch (type)
+            {
+                case "R":
+                    {
+                        for (int i = 0; i < 255; ++i)
+                        {
+                            sum += avR[i];
+                        }
+                        for(int i = 0; i < 255; ++i)
+                        {
+                            freq[i] = avR[i] / sum;
+                        }
+                        break;
+                    }
+                case "G":
+                    {
+                        for (int i = 0; i < 255; ++i)
+                        {
+                            sum += avG[i];
+                        }
+                        for (int i = 0; i < 255; ++i)
+                        {
+                            freq[i] = avG[i] / sum;
+                        }
+                        break;
+                    }
+                case "B":
+                    {
+                        for (int i = 0; i < 255; ++i)
+                        {
+                            sum += avB[i];
+                        }
+                        for (int i = 0; i < 255; ++i)
+                        {
+                            freq[i] = avB[i] / sum;
+                        }
+                        break;
+                    }                    
+            }
+            return freq;
+        }
+
+        public Color newBrightness(Color point, double q) //расчет новой яркости
         {
             byte R = 0, G = 0, B = 0;
             int[] mx = { point.R, point.G, point.B };
             int max = mx.Max();
             double q_new = q;
-
-            if (isAvgBright)
-            {
-                q_new = 127.5 / q;
-            }
+            q_new = 127.5 / q;
             
             double q1 = q_new;
             double max1 = max * q1;
