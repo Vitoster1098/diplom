@@ -1,4 +1,4 @@
-﻿
+
 namespace Diplom
 {
     partial class Form1
@@ -76,11 +76,14 @@ namespace Diplom
             this.FilterButton = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.label4 = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.DeflRLabel = new System.Windows.Forms.Label();
+            this.DeflGLabel = new System.Windows.Forms.Label();
+            this.DeflBLabel = new System.Windows.Forms.Label();
+            this.MedRLabel = new System.Windows.Forms.Label();
+            this.MedGLabel = new System.Windows.Forms.Label();
+            this.MedBLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.connect_status)).BeginInit();
             this.panel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -134,7 +137,7 @@ namespace Diplom
             this.panel1.Controls.Add(this.connect_status);
             this.panel1.Controls.Add(this.disconnect);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 783);
+            this.panel1.Location = new System.Drawing.Point(0, 819);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1068, 32);
             this.panel1.TabIndex = 3;
@@ -233,7 +236,7 @@ namespace Diplom
             // 
             this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar1.Location = new System.Drawing.Point(0, 768);
+            this.progressBar1.Location = new System.Drawing.Point(0, 804);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(1068, 15);
             this.progressBar1.TabIndex = 5;
@@ -252,7 +255,7 @@ namespace Diplom
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Location = new System.Drawing.Point(10, 178);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(243, 433);
+            this.listBox1.Size = new System.Drawing.Size(243, 615);
             this.listBox1.TabIndex = 7;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
@@ -278,9 +281,10 @@ namespace Diplom
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(320, 76);
+            this.button1.Font = new System.Drawing.Font("Impact", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.button1.Location = new System.Drawing.Point(259, 387);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(87, 31);
+            this.button1.Size = new System.Drawing.Size(410, 70);
             this.button1.TabIndex = 12;
             this.button1.Text = "Обработать";
             this.button1.UseVisualStyleBackColor = true;
@@ -308,7 +312,7 @@ namespace Diplom
             // avgLabel
             // 
             this.avgLabel.AutoSize = true;
-            this.avgLabel.Location = new System.Drawing.Point(261, 516);
+            this.avgLabel.Location = new System.Drawing.Point(3, 11);
             this.avgLabel.Name = "avgLabel";
             this.avgLabel.Size = new System.Drawing.Size(97, 13);
             this.avgLabel.TabIndex = 14;
@@ -360,7 +364,7 @@ namespace Diplom
             this.chart4.ChartAreas.Add(chartArea8);
             legend8.Name = "Legend1";
             this.chart4.Legends.Add(legend8);
-            this.chart4.Location = new System.Drawing.Point(259, 567);
+            this.chart4.Location = new System.Drawing.Point(259, 463);
             this.chart4.Name = "chart4";
             series10.ChartArea = "ChartArea1";
             series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
@@ -387,7 +391,7 @@ namespace Diplom
             // avR
             // 
             this.avR.AutoSize = true;
-            this.avR.Location = new System.Drawing.Point(261, 539);
+            this.avR.Location = new System.Drawing.Point(6, 43);
             this.avR.Name = "avR";
             this.avR.Size = new System.Drawing.Size(64, 13);
             this.avR.TabIndex = 18;
@@ -396,7 +400,7 @@ namespace Diplom
             // avG
             // 
             this.avG.AutoSize = true;
-            this.avG.Location = new System.Drawing.Point(375, 539);
+            this.avG.Location = new System.Drawing.Point(146, 43);
             this.avG.Name = "avG";
             this.avG.Size = new System.Drawing.Size(64, 13);
             this.avG.TabIndex = 19;
@@ -405,7 +409,7 @@ namespace Diplom
             // avB
             // 
             this.avB.AutoSize = true;
-            this.avB.Location = new System.Drawing.Point(497, 539);
+            this.avB.Location = new System.Drawing.Point(275, 43);
             this.avB.Name = "avB";
             this.avB.Size = new System.Drawing.Size(63, 13);
             this.avB.TabIndex = 20;
@@ -449,49 +453,6 @@ namespace Diplom
             this.label2.TabIndex = 0;
             this.label2.Text = "Фильтрация:";
             // 
-            // panel3
-            // 
-            this.panel3.Controls.Add(this.radioButton3);
-            this.panel3.Controls.Add(this.radioButton2);
-            this.panel3.Controls.Add(this.radioButton1);
-            this.panel3.Controls.Add(this.button1);
-            this.panel3.Location = new System.Drawing.Point(259, 387);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(410, 110);
-            this.panel3.TabIndex = 22;
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(5, 13);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(112, 17);
-            this.radioButton1.TabIndex = 13;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Средняя яркость";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(5, 36);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(194, 17);
-            this.radioButton2.TabIndex = 14;
-            this.radioButton2.Text = "Среднеквадратичное отклонение";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            // 
-            // radioButton3
-            // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(5, 59);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(82, 17);
-            this.radioButton3.TabIndex = 15;
-            this.radioButton3.Text = "Медианное";
-            this.radioButton3.UseVisualStyleBackColor = true;
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -501,21 +462,89 @@ namespace Diplom
             this.label4.TabIndex = 23;
             this.label4.Text = "Гистограммы:";
             // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.MedBLabel);
+            this.panel3.Controls.Add(this.MedGLabel);
+            this.panel3.Controls.Add(this.MedRLabel);
+            this.panel3.Controls.Add(this.DeflBLabel);
+            this.panel3.Controls.Add(this.DeflGLabel);
+            this.panel3.Controls.Add(this.DeflRLabel);
+            this.panel3.Controls.Add(this.avgLabel);
+            this.panel3.Controls.Add(this.avB);
+            this.panel3.Controls.Add(this.avR);
+            this.panel3.Controls.Add(this.avG);
+            this.panel3.Location = new System.Drawing.Point(259, 665);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(410, 125);
+            this.panel3.TabIndex = 24;
+            // 
+            // DeflRLabel
+            // 
+            this.DeflRLabel.AutoSize = true;
+            this.DeflRLabel.Location = new System.Drawing.Point(6, 103);
+            this.DeflRLabel.Name = "DeflRLabel";
+            this.DeflRLabel.Size = new System.Drawing.Size(75, 13);
+            this.DeflRLabel.TabIndex = 21;
+            this.DeflRLabel.Text = "Ср.кв.откл R:";
+            // 
+            // DeflGLabel
+            // 
+            this.DeflGLabel.AutoSize = true;
+            this.DeflGLabel.Location = new System.Drawing.Point(135, 103);
+            this.DeflGLabel.Name = "DeflGLabel";
+            this.DeflGLabel.Size = new System.Drawing.Size(75, 13);
+            this.DeflGLabel.TabIndex = 22;
+            this.DeflGLabel.Text = "Ср.кв.откл G:";
+            // 
+            // DeflBLabel
+            // 
+            this.DeflBLabel.AutoSize = true;
+            this.DeflBLabel.Location = new System.Drawing.Point(263, 103);
+            this.DeflBLabel.Name = "DeflBLabel";
+            this.DeflBLabel.Size = new System.Drawing.Size(74, 13);
+            this.DeflBLabel.TabIndex = 23;
+            this.DeflBLabel.Text = "Ср.кв.откл B:";
+            // 
+            // MedRLabel
+            // 
+            this.MedRLabel.AutoSize = true;
+            this.MedRLabel.Location = new System.Drawing.Point(6, 76);
+            this.MedRLabel.Name = "MedRLabel";
+            this.MedRLabel.Size = new System.Drawing.Size(66, 13);
+            this.MedRLabel.TabIndex = 24;
+            this.MedRLabel.Text = "Медиана R:";
+            // 
+            // MedGLabel
+            // 
+            this.MedGLabel.AutoSize = true;
+            this.MedGLabel.Location = new System.Drawing.Point(144, 76);
+            this.MedGLabel.Name = "MedGLabel";
+            this.MedGLabel.Size = new System.Drawing.Size(66, 13);
+            this.MedGLabel.TabIndex = 25;
+            this.MedGLabel.Text = "Медиана G:";
+            // 
+            // MedBLabel
+            // 
+            this.MedBLabel.AutoSize = true;
+            this.MedBLabel.Location = new System.Drawing.Point(271, 76);
+            this.MedBLabel.Name = "MedBLabel";
+            this.MedBLabel.Size = new System.Drawing.Size(65, 13);
+            this.MedBLabel.TabIndex = 26;
+            this.MedBLabel.Text = "Медиана B:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1068, 815);
-            this.Controls.Add(this.label4);
+            this.ClientSize = new System.Drawing.Size(1068, 851);
             this.Controls.Add(this.panel3);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.avB);
-            this.Controls.Add(this.avG);
-            this.Controls.Add(this.avR);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.chart4);
             this.Controls.Add(this.chart3);
             this.Controls.Add(this.chart2);
-            this.Controls.Add(this.avgLabel);
             this.Controls.Add(this.chart1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.pictureBox2);
@@ -584,11 +613,14 @@ namespace Diplom
         private System.Windows.Forms.Button FilterButton;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Label DeflRLabel;
+        private System.Windows.Forms.Label DeflBLabel;
+        private System.Windows.Forms.Label DeflGLabel;
+        private System.Windows.Forms.Label MedRLabel;
+        private System.Windows.Forms.Label MedBLabel;
+        private System.Windows.Forms.Label MedGLabel;
     }
 }
 
